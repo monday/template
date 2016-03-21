@@ -1,0 +1,51 @@
+<%
+var siteName = 'template - ';
+-%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title><%= siteName + title %></title>
+<meta name="description" content="<%= description %>">
+<meta name="keyword" content="<%= keyword %>">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<%# SPリンク可否設定 -%>
+<meta name="format-detection" content="telephone=no,address=no,email=no">
+<%# open graph protocol -%>
+<meta property="og:title" content="<%= ogTitle %>">
+<meta property="og:type" content="<%= ogType %>">
+<meta property="og:description" content="<%= ogDescription %>">
+<meta property="og:url" content="<%= ogURL %>">
+<meta property="og:image" content="<%= ogImage %>">
+<meta property="og:site_name" content="<%= ogSitename %>">
+<%# twitter card（要サイト登録）-%>
+<meta name="twitter:card" content="<%= twitterCard %>">
+<meta name="twitter:site" content="<%= twitterSite %>">
+<%# apple-touch-icon -%>
+<%# iPad 2 and iPad mini (@1x) -%>
+<link rel="apple-touch-icon" sizes="76x76" href="/images/">
+<%# iPhone 6 and iPhone 5 and iPhone 4s (@2x) -%>
+<link rel="apple-touch-icon" sizes="120x120" href="/images/">
+<%# iPad and iPad mini (@2x) -%>
+<link rel="apple-touch-icon" sizes="152x152" href="/images/">
+<%# iPhone 6 Plus (@3x) -%>
+<link rel="apple-touch-icon" sizes="180x180" href="/images/">
+<%# default -%>
+<link rel="apple-touch-icon" href="/images/">
+<link rel="shortcut icon" href="images/favicon/favicon.ico">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<div class="wrapper">
+<% include _header -%>
+		<div class="container">
+			<main>
+				<div class="contents">
+<% content() -%>
+				</div>
+			</main>
+		</div>
+<% include _footer -%>
+	</div>
+</body>
+</html>
