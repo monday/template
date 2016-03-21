@@ -1,11 +1,12 @@
 <%
-var siteName = 'template - ';
+var _siteName = 'template';
+var siteName = (title === '') ? _siteName : ' - ' + _siteName;
 -%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title><%= siteName + title %></title>
+<title><%= title + siteName %></title>
 <meta name="description" content="<%= description %>">
 <meta name="keyword" content="<%= keyword %>">
 <meta name="viewport" content="width=device-width,initial-scale=1">
