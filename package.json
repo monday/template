@@ -16,6 +16,7 @@
     "gulp-plumber": "^1.1.0",
     "gulp-sass": "^2.2.0",
     "gulp.spritesmith": "^6.2.1",
+    "require-dir": "^0.3.0",
     "run-sequence": "^1.1.5",
     "webpack": "^1.12.14"
   }

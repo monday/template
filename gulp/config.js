@@ -10,7 +10,7 @@ module.exports = {
 	domain: domain,
 	ejs: {
 		src: src + '/ejs/**/!(_)*.ejs',
-		watch: src + '/**/*.ejs',
+		watch: src + '/ejs/**/*.ejs',
 		dest: dest
 	},
 	sass: {
