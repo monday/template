@@ -6,6 +6,7 @@ gulp.task('browsersync', function(){
 	bs.init({
 		server: {
 			baseDir: './dest',
+			index: 'index.html'
 		},
 		//proxy: {
 		//	target: config.bs.domain // ローカル環境構築済みの場合はproxyする
@@ -18,8 +19,6 @@ gulp.task('browsersync', function(){
 	// watch
 	gulp.watch(config.ejs.watch, ['ejs']);
 	gulp.watch(config.sass.src, ['sass']);
+	gulp.watch(config.webpack.watch, ['webpack']);
 	gulp.watch(config.copy.src, ['copy']);
-
-	// livereload
-	gulp.watch(config.src + '/js/**').on('change', bs.reload);
 });

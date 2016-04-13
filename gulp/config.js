@@ -1,8 +1,8 @@
 var path = require('path');
-// ファイルの追加を監視するため相対パスに
-var dest = path.relative('.', 'dest');
-var src = path.relative('.', 'src');
-var domain = 'www.test.com';
+// ファイルの追加を監視するため絶対パスに
+var dest = path.resolve('dest');
+var src = path.resolve('src');
+var domain = 'template.local';
 
 module.exports = {
 	src: src,
@@ -17,14 +17,10 @@ module.exports = {
 		src: src + '/css/**/*.scss',
 		dest: dest + '/css'
 	},
-	js: {
-		src: src + '/js'
-	},
 	copy: {
 		src: [
 			src + '/images/**',
 			src + '/css/fonts/**',
-			src + '/js/**'
 		],
 	},
 	sprite: {
@@ -33,8 +29,13 @@ module.exports = {
 		],
 		dest: {
 			image: src + '/images/',
-			css: src + '/styl/'
+			css: src + '/css/'
 		}
+	},
+	webpack: {
+		src: src + '/js/app.js',
+		watch: src + '/js/**/*.js',
+		dest: dest + '/js'
 	},
 	bs: {
 	}

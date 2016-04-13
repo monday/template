@@ -4,7 +4,6 @@ var sequence = require('run-sequence');
 gulp.task('build', function(callback){
 	return sequence(
 		'clean',
-		['ejs', 'sass', 'copy'],
-		callback
+		['ejs', 'sass', 'webpack', 'copy']
 	);
 });
