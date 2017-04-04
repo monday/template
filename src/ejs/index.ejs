@@ -1,18 +1,20 @@
 <%
-var title = '';
-var description = '';
-var keyword = '';
-var ogTitle = '';
-var ogType = '';
-var ogDescription = '';
-var ogURL = '';
-var ogImage = '';
-var ogSitename = '';
-var twitterCard = 'summary';
-var twitterSite = '';
+var page = {
+	title: 'トップページ',
+	description: 'templateのdescription',
+	keyword: 'templateのkeyword',
+	ogTitle: 'templateのogTitle',
+	ogType: 'templateのogType',
+	ogDescription: 'templateのogDescription',
+	ogURL: 'templateのogURL',
+	ogImage: 'templateのogImage',
+	ogSitename: 'templateのogSitename',
+	twitterCard: 'summary',
+	twitterSite: 'templateのtwitterSite',
+}
 
 function content(){
 -%>
 			<h1>contents!!</h1>
 <%}; -%>
-<% include partial/_layout -%>
+<% include src/ejs/partial/_layout -%>

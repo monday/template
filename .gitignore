@@ -2,4 +2,5 @@ dest/
 .DS_Store
 node_modules/
 task.txt
+*.log
 

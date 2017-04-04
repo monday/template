@@ -1,53 +1,55 @@
 <%
-var _siteName = 'template';
-var siteName = (title === 'undefined' || title === '') ? _siteName : ' - ' + _siteName;
+var site = {
+	name: 'template',
+	domain: '//localhost:' + port + '/',
+};
+
+site.title = page.title ? page.title + ' | ' + site.name : site.name;
 -%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title><%= title + siteName %></title>
-<meta name="description" content="<%= description %>">
-<meta name="keyword" content="<%= keyword %>">
+<title><%= site.title %></title>
+<meta name="description" content="<%= page.description %>">
+<meta name="keyword" content="<%= page.keyword %>">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <%# SPリンク可否設定 -%>
 <meta name="format-detection" content="telephone=no,address=no,email=no">
 <%# open graph protocol -%>
-<meta property="og:title" content="<%= ogTitle %>">
-<meta property="og:type" content="<%= ogType %>">
-<meta property="og:description" content="<%= ogDescription %>">
-<meta property="og:url" content="<%= ogURL %>">
-<meta property="og:image" content="<%= ogImage %>">
-<meta property="og:site_name" content="<%= ogSitename %>">
+<meta property="og:title" content="<%= page.ogTitle %>">
+<meta property="og:type" content="<%= page.ogType %>">
+<meta property="og:description" content="<%= page.ogDescription %>">
+<meta property="og:url" content="<%= page.ogURL %>">
+<meta property="og:image" content="<%= page.ogImage %>">
+<meta property="og:site_name" content="<%= page.ogSitename %>">
 <%# twitter card（要サイト登録）-%>
-<meta name="twitter:card" content="<%= twitterCard %>">
-<meta name="twitter:site" content="<%= twitterSite %>">
+<meta name="twitter:card" content="<%= page.twitterCard %>">
+<meta name="twitter:site" content="<%= page.twitterSite %>">
 <%# apple-touch-icon -%>
 <%# iPad 2 and iPad mini (@1x) -%>
-<link rel="apple-touch-icon" sizes="76x76" href="/images/icon/76.png">
+<link rel="apple-touch-icon" sizes="76x76" href="<%= site.domain %>images/icon/76.png">
 <%# iPhone 6 and iPhone 5 and iPhone 4s (@2x) -%>
-<link rel="apple-touch-icon" sizes="120x120" href="/images/icon/120.png">
+<link rel="apple-touch-icon" sizes="120x120" href="<%= site.domain %>images/icon/120.png">
 <%# iPad and iPad mini (@2x) -%>
-<link rel="apple-touch-icon" sizes="152x152" href="/images/icon/152.png">
+<link rel="apple-touch-icon" sizes="152x152" href="<%= site.domain %>images/icon/152.png">
 <%# iPhone 6 Plus (@3x) -%>
-<link rel="apple-touch-icon" sizes="180x180" href="/images/icon/180.png">
+<link rel="apple-touch-icon" sizes="180x180" href="<%= site.domain %>images/icon/180.png">
 <%# default -%>
-<link rel="apple-touch-icon" href="/images/icon/default.png">
-<link rel="shortcut icon" href="/images/icon/favicon.ico">
-<link rel="stylesheet" href="/css/style.css">
+<link rel="apple-touch-icon" href="<%= site.domain %>images/icon/default.png">
+<link rel="shortcut icon" href="<%= site.domain %>images/icon/favicon.ico">
+<link rel="stylesheet" href="<%= site.domain %>css/style.css">
 </head>
 <body>
-	<div class="wrapper">
+<div class="wrapper">
 <% include _header -%>
-		<div class="container">
-			<main>
-				<div class="contents">
+	<div class="container">
+		<div class="contents">
 <% content() -%>
-				</div>
-			</main>
 		</div>
-<% include _footer -%>
 	</div>
-<script src="js/app.js"></script>
+<% include _footer -%>
+</div>
+<script src="<%= site.domain %>js/app.js"></script>
 </body>
 </html>
