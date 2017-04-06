@@ -45,8 +45,6 @@ del.dest();
 // コンパイル
 recursive.process('src/', sortInExtension);
 
-console.log('config.port');
-console.log(config.port);
 // browsersync起動
 bs.init({
 	server: config.dest + '/',
