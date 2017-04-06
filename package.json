@@ -2,9 +2,8 @@
   "name": "template",
   "version": "1.0.0",
   "description": "",
-  "main": "gulpfile.js",
   "scripts": {
-    "build": "node script/build.js",
+    "start": "node script/build.js",
     "image": "node script/image.js",
     "del": "node script/delete.js true"
   },
