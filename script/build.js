@@ -1,5 +1,6 @@
 const path = require('path');
 const bs = require('browser-sync');
+const glob = require('glob');
 
 const config = require('./config');
 const del = require('./delete');
@@ -9,6 +10,9 @@ const sass = require('./sass');
 const copy = require('./copy');
 
 
+ejs.dest();
+sass.dest();
+copy.dest();
 
 // 拡張子によって処理を振り分ける
 function sortInExtension (filePath){
@@ -42,8 +46,8 @@ function sortInExtension (filePath){
 // destディレクトリ削除
 del.dest();
 
-// コンパイル
-recursive.process('src/', sortInExtension);
+//// コンパイル
+//recursive.process('src/', sortInExtension);
 
 // browsersync起動
 bs.init({
@@ -52,7 +56,15 @@ bs.init({
 });
 
 // ソースファイルのwatch
-bs.watch('src/**').on('change', function(){
-	recursive.process('src/', sortInExtension);
+bs.watch('src/**/*.ejs').on('change', function(){
+	ejs.dest();
+	bs.reload();
+});
+bs.watch('src/**/*.scss').on('change', function(){
+	sass.dest();
+	bs.reload();
+});
+bs.watch('src/**/*.@(html|css|png|jpg|jpeg|gif|eot|woff|woff2|ttf|otf)').on('change', function(){
+	copy.dest();
 	bs.reload();
 });

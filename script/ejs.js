@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const ejs = require('ejs');
 const mkdirp = require('mkdirp');
+const glob = require('glob');
 const config = require('./config');
 const obj = {};
 
@@ -13,10 +14,10 @@ obj.compile = (filePath) => {
 	const filename = path.basename(filePath, extension);
 	const dirname = path.dirname(filePath).replace(/src\/ejs/, '');
 	const dest = config.dest + dirname + '/' + filename + '.html';
-	const image = dirname + '/';
 
 	mkdirp(config.dest + dirname + '/', function(err){
 		if(err) {
+			console.log('ejs');
 			console.log(err);
 			return;
 		}
@@ -34,7 +35,6 @@ obj.compile = (filePath) => {
 		//// htmlとして書き込み
 		//}).then((data) => {
 		//	fs.writeFile(dest, data({
-		//		image: image,
 		//		env: process.argv[2]
 		//	}));
 		//}).catch((err) => {
@@ -47,11 +47,18 @@ obj.compile = (filePath) => {
 		});
 
 		fs.writeFileSync(dest, data({
-			image: image,
 			port: config.port,
 			env: process.argv[2]
 		}));
 	});
-}
+};
+
+obj.dest = () => {
+	glob('src/ejs/**/!(_)*.ejs', (err, files) => {
+		files.forEach((path, index) => {
+			obj.compile(path);
+		});
+	});
+};
 
 module.exports = obj;

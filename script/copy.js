@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
+const glob = require('glob');
 const config = require('./config');
 const obj = {};
 
@@ -27,6 +28,16 @@ obj.binary = (filePath) => {
 		.then((file) => fs.writeFileSync(dest, file))
 		.catch((err) => console.log(err));
 }
+
+
+// TODO: 文字コード指定は外だししてcopyメソッドを作る
+obj.dest = () => {
+	glob('src/**/*.@(html|css|png|jpg|jpeg|gif|eot|woff|woff2|ttf|otf)', (err, files) => {
+		files.forEach((path, index) => {
+			obj.binary(path);
+		});
+	});
+};
 
 
 
