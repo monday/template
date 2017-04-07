@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node script/build.js",
     "image": "node script/image.js",
-    "del": "node script/delete.js true"
+    "del": "node script/delete.js"
   },
   "babel": {
     "presets": ["env"]

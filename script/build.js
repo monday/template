@@ -3,7 +3,6 @@ const path = require('path');
 const bs = require('browser-sync').create(config.name);
 const glob = require('glob');
 
-const del = require('./delete');
 const ejs = require('./ejs');
 const sass = require('./sass');
 const copy = require('./copy');
@@ -12,7 +11,7 @@ const browserify = require('./browserify');
 
 
 // destディレクトリ削除
-del.dest();
+const del = require('./delete');
 
 // ソースファイルのコンパイル & コピー
 ejs.dest();
