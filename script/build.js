@@ -1,8 +1,8 @@
+const config = require('./config');
 const path = require('path');
-const bs = require('browser-sync');
+const bs = require('browser-sync').create(config.name);
 const glob = require('glob');
 
-const config = require('./config');
 const del = require('./delete');
 const ejs = require('./ejs');
 const sass = require('./sass');
