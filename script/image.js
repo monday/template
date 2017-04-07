@@ -1,8 +1,9 @@
 const path = require('path');
+const glob = require('glob');
 const imagemin = require('imagemin');
 const imageminMozjpeg = require('imagemin-mozjpeg');
 const imageminPngquant = require('imagemin-pngquant');
-const recursive = require('./recursive');
+const config = require('./config');
 
 
 
@@ -18,7 +19,8 @@ const image = (input, output) => {
 	})
 };
 
-const files = recursive.getFilePath('src/images/');
-files.forEach((file, index) => {
-	image(file, path.dirname(file).replace(/^src/, 'dest'));
+glob('src/**/*.@(' + config.copy.images.join('|') + ')', (err, files) => {
+	files.forEach((file, index) => {
+		image(file, path.dirname(file).replace(config.src, config.dest));
+	});
 });

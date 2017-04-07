@@ -1,6 +1,7 @@
 const config = {
-	dest: 'dest',
 	port: 3010,
+	src: 'src',
+	dest: 'dest',
 	//exclude: 'partial'
 	copy: {
 		files: ['html', 'css'],
