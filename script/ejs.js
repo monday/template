@@ -15,7 +15,7 @@ obj.compile = (filePath) => {
 	const dirname = path.dirname(filePath).replace(config.src + '\/ejs', '');
 	const dest = config.dest + dirname + '/' + filename + '.html';
 
-	mkdirp(config.dest + dirname + '/', function(err){
+	mkdirp(config.dest + dirname + '/', (err) => {
 		if(err) {
 			console.log('ejs');
 			console.log(err);

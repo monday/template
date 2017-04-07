@@ -14,7 +14,7 @@ obj.compile = (filePath) => {
 	const dirname = path.dirname(filePath).replace(config.src, '');
 	const dest = config.dest + dirname + '/' + filename + '.css';
 
-	mkdirp(config.dest + dirname + '/', function(err){
+	mkdirp(config.dest + dirname + '/', (err) => {
 		if(err) {
 			console.log('sass');
 			console.log(err);
