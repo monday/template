@@ -52,6 +52,7 @@ del.dest();
 // browsersync起動
 bs.init({
 	server: config.dest + '/',
+	open: false,
 	port: config.port,
 });
 
@@ -64,7 +65,7 @@ bs.watch('src/**/*.scss').on('change', function(){
 	sass.dest();
 	bs.reload();
 });
-bs.watch('src/**/*.@(html|css|png|jpg|jpeg|gif|eot|woff|woff2|ttf|otf)').on('change', function(){
+bs.watch(config.copy.pattern()).on('change', function(){
 	copy.dest();
 	bs.reload();
 });
