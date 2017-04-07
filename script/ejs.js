@@ -12,7 +12,7 @@ const obj = {};
 obj.compile = (filePath) => {
 	const extension = path.extname(filePath);
 	const filename = path.basename(filePath, extension);
-	const dirname = path.dirname(filePath).replace(/src\/ejs/, '');
+	const dirname = path.dirname(filePath).replace(config.src + '\/ejs', '');
 	const dest = config.dest + dirname + '/' + filename + '.html';
 
 	mkdirp(config.dest + dirname + '/', function(err){
@@ -22,43 +22,28 @@ obj.compile = (filePath) => {
 			return;
 		}
 
-		//// ejsファイルの読み込み
-		//new Promise((resolve, reject) => {
-		//	fs.readFile(filePath, 'utf8', (err, file) => {
-		//		resolve(file);
-		//	});
-		//// ejsファイルのコンパイル
-		//}).then((ejsFile) => {
-		//	return ejs.compile(ejsFile, {
-		//		filename: true
-		//	});
-		//// htmlとして書き込み
-		//}).then((data) => {
-		//	fs.writeFile(dest, data({
-		//		env: process.argv[2]
-		//	}));
-		//}).catch((err) => {
-		//	console.log(err);
-		//});
-
-		const file = fs.readFileSync(filePath, 'utf8');
+		const file = fs.readFileSync(filePath, config.encoding);
 		const data = ejs.compile(file, {
 			filename: true
 		});
 
 		fs.writeFileSync(dest, data({
-			port: config.port,
+			port: config.port,// 絶対パスのために必要
 			env: process.argv[2]
 		}));
 	});
 };
 
+
+
 obj.dest = () => {
-	glob('src/ejs/**/!(_)*.ejs', (err, files) => {
+	glob(config.ejs.src, (err, files) => {
 		files.forEach((path, index) => {
 			obj.compile(path);
 		});
 	});
 };
+
+
 
 module.exports = obj;

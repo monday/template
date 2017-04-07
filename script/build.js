@@ -26,11 +26,11 @@ bs.init({
 });
 
 // ソースファイルのwatch
-bs.watch('src/**/*.ejs').on('change', function(){
+bs.watch(config.ejs.watch).on('change', function(){
 	ejs.dest();
 	bs.reload();
 });
-bs.watch('src/**/*.scss').on('change', function(){
+bs.watch(config.sass.watch).on('change', function(){
 	sass.dest();
 	bs.reload();
 });

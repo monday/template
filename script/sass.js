@@ -11,7 +11,7 @@ const obj = {};
 obj.compile = (filePath) => {
 	const extension = path.extname(filePath);
 	const filename = path.basename(filePath, extension);
-	const dirname = path.dirname(filePath).replace(/src/, '');
+	const dirname = path.dirname(filePath).replace(config.src, '');
 	const dest = config.dest + dirname + '/' + filename + '.css';
 
 	mkdirp(config.dest + dirname + '/', function(err){
@@ -21,7 +21,7 @@ obj.compile = (filePath) => {
 			return;
 		}
 
-		const file = fs.readFileSync(filePath, 'utf8');
+		const file = fs.readFileSync(filePath, config.encoding);
 		const data = sass.renderSync({
 			data: file
 		});
@@ -31,7 +31,7 @@ obj.compile = (filePath) => {
 };
 
 obj.dest = () => {
-	glob('src/css/**/!(_)*.scss', (err, files) => {
+	glob(config.sass.src, (err, files) => {
 		files.forEach((path, index) => {
 			obj.compile(path);
 		});

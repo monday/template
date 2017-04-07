@@ -1,8 +1,16 @@
 const config = {
 	port: 3010,
+	encoding: 'utf8',
 	src: 'src',
 	dest: 'dest',
-	//exclude: 'partial'
+	ejs: {
+		src: 'src/ejs/**/!(_)*.ejs',
+		watch: 'src/ejs/**/*.ejs'
+	},
+	sass: {
+		src: 'src/css/**/!(_)*.scss',
+		watch: 'src/css/**/*.scss'
+	},
 	copy: {
 		files: ['html', 'css'],
 		images: ['png', 'jpg', 'jpeg', 'gif', 'ico'],
