@@ -7,6 +7,7 @@ const del = require('./delete');
 const ejs = require('./ejs');
 const sass = require('./sass');
 const copy = require('./copy');
+const browserify = require('./browserify');
 
 
 
@@ -17,6 +18,7 @@ del.dest();
 ejs.dest();
 sass.dest();
 copy.dest();
+browserify.dest();
 
 // browsersync起動
 bs.init({
@@ -26,6 +28,7 @@ bs.init({
 });
 
 // ソースファイルのwatch
+// jsのwatchはwatchifyで
 bs.watch(config.ejs.watch).on('change', function(){
 	ejs.dest();
 	bs.reload();

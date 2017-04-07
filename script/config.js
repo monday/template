@@ -15,6 +15,10 @@ const config = {
 		files: ['html', 'css'],
 		images: ['png', 'jpg', 'jpeg', 'gif', 'ico'],
 		fonts: ['eot', 'woff', 'woff2', 'ttf', 'otf'],
+	},
+	browserify: {
+		src: 'src/js/*.js',
+		dest: 'dest/js/'
 	}
 }
 
