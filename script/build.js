@@ -7,11 +7,12 @@ const ejs = require('./ejs');
 const sass = require('./sass');
 const copy = require('./copy');
 const browserify = require('./browserify');
+const del = require('./delete');
 
 
 
 // destディレクトリ削除
-const del = require('./delete');
+del.exec();
 
 // ソースファイルのコンパイル & コピー
 ejs.dest();
@@ -27,7 +28,7 @@ bs.init({
 });
 
 // ソースファイルのwatch
-// jsのwatchはwatchifyで
+// jsのwatchはwatchifyで行う
 bs.watch(config.ejs.watch).on('change', function(){
 	ejs.dest();
 	bs.reload();
@@ -36,7 +37,14 @@ bs.watch(config.sass.watch).on('change', function(){
 	sass.dest();
 	bs.reload();
 });
-bs.watch(config.copy.pattern()).on('change', function(){
-	copy.dest();
+bs.watch(config.copy.pattern(), (e, file) => {
+	// ファイル削除
+	if(e === 'unlink'){
+		del.exec(file);
+	// add or changeでファイルコピー
+	}else{
+		copy.dest(file);
+	}
+
 	bs.reload();
 });

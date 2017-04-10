@@ -22,8 +22,10 @@ obj.files = (src, encoding) => {
 
 
 
-obj.dest = () => {
-	glob(config.copy.pattern(), (err, files) => {
+obj.dest = (filePath) => {
+	const expression = filePath ? filePath : config.copy.pattern();
+
+	glob(expression, (err, files) => {
 		files.forEach((path, index) => {
 			//obj.files(path, 'utf8');
 			obj.files(path);
