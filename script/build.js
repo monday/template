@@ -11,6 +11,11 @@ const del = require('./delete');
 
 
 
+// エラーが発生しても落ちないように
+process.on('uncaughtException', function(err) {
+	console.log(err);
+});
+
 // destディレクトリ削除
 del.exec();
 
