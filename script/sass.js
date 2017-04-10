@@ -11,10 +11,10 @@ const obj = {};
 obj.compile = (filePath) => {
 	const extension = path.extname(filePath);
 	const filename = path.basename(filePath, extension);
-	const dirname = path.dirname(filePath).replace(config.src, '');
-	const dest = config.dest + dirname + '/' + filename + '.css';
+	const dirname = config.dest + path.dirname(filePath).replace(config.src, '') + '/';
+	const dest = dirname + filename + '.css';
 
-	mkdirp(config.dest + dirname + '/', (err) => {
+	mkdirp(dirname, (err) => {
 		if(err) {
 			console.log('sass');
 			console.log(err);

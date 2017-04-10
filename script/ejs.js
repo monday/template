@@ -12,10 +12,10 @@ const obj = {};
 obj.compile = (filePath) => {
 	const extension = path.extname(filePath);
 	const filename = path.basename(filePath, extension);
-	const dirname = path.dirname(filePath).replace(config.src + '\/ejs', '');
-	const dest = config.dest + dirname + '/' + filename + '.html';
+	const dirname = config.dest + path.dirname(filePath).replace(config.src + '\/ejs', '') + '/';
+	const dest = dirname + filename + '.html';
 
-	mkdirp(config.dest + dirname + '/', (err) => {
+	mkdirp(dirname, (err) => {
 		if(err) {
 			console.log('ejs');
 			console.log(err);

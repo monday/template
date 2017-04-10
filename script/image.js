@@ -7,6 +7,7 @@ const config = require('./config');
 
 
 
+// imageminでpngとjpgを圧縮する
 const image = (input, output) => {
 	imagemin([input], output, {
 		plugins: [
@@ -18,6 +19,7 @@ const image = (input, output) => {
 		//=> [{data: <Buffer 89 50 4e …>, path: 'build/images/foo.jpg'}, …]
 	})
 };
+
 
 glob('src/**/*.@(' + config.copy.images.join('|') + ')', (err, files) => {
 	files.forEach((file, index) => {

@@ -33,10 +33,12 @@ bs.watch(config.ejs.watch).on('change', function(){
 	ejs.dest();
 	bs.reload();
 });
+
 bs.watch(config.sass.watch).on('change', function(){
 	sass.dest();
 	bs.reload();
 });
+
 bs.watch(config.copy.pattern(), (e, file) => {
 	// ファイル削除
 	if(e === 'unlink'){
