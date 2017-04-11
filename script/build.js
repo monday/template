@@ -34,24 +34,46 @@ bs.init({
 
 // ソースファイルのwatch
 // jsのwatchはwatchifyで行う
-bs.watch(config.ejs.watch).on('change', function(){
-	ejs.dest();
-	bs.reload();
-});
-
-bs.watch(config.sass.watch).on('change', function(){
-	sass.dest();
-	bs.reload();
-});
-
-bs.watch(config.copy.pattern(), (e, file) => {
-	// ファイル削除
-	if(e === 'unlink'){
+const watchEjs = bs.watch(config.ejs.watch);
+watchEjs.on('ready', () => {
+	watchEjs.on('add', (file, stats) => {
+		ejs.dest();
+		bs.reload();
+	}).on('change', (file, stats) => {
+		ejs.dest();
+		bs.reload();
+	}).on('unlink', (file) => {
 		del.exec(file);
-	// add or changeでファイルコピー
-	}else{
-		copy.dest(file);
-	}
+		ejs.dest();
+		bs.reload();
+	});
+});
 
-	bs.reload();
+const watchSass = bs.watch(config.sass.watch);
+watchSass.on('ready', () => {
+	watchSass.on('add', (file, stats) => {
+		sass.dest();
+		bs.reload();
+	}).on('change', (file, stats) => {
+		sass.dest();
+		bs.reload();
+	}).on('unlink', (file) => {
+		del.exec(file);
+		sass.dest();
+		bs.reload();
+	});
+});
+
+const watchCopy = bs.watch(config.copy.pattern());
+watchCopy.on('ready', () => {
+	watchCopy.on('add', (file, stats) => {
+		copy.dest(file);
+		bs.reload();
+	}).on('change', (file, stats) => {
+		copy.dest(file);
+		bs.reload();
+	}).on('unlink', (file) => {
+		del.exec(file);
+		bs.reload();
+	});
 });
