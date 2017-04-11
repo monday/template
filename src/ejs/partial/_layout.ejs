@@ -15,38 +15,38 @@ var site = {
 };
 
 // 個別ページで定義されていない場合はデフォルト値を設定する
-site.title = page.title ? page.title + ' | ' + site.name : site.name;
-site.description = page.description ? page.description : site.description;
-site.keyword = page.keyword ? page.keyword : site.keyword;
-site.ogTitle = page.ogTitle ? page.ogTitle : site.ogTitle;
-site.ogType = page.ogType ? page.ogType : site.ogType;
-site.ogDescription = page.ogDescription ? page.ogDescription : site.ogDescription;
-site.ogURL = page.ogURL ? page.ogURL : site.ogURL;
-site.ogImage = page.ogImage ? page.ogImage : site.ogImage;
-site.ogSitename = page.ogSitename ? page.ogSitename : site.ogSitename;
-site.twitterCard = page.twitterCard ? page.twitterCard : site.twitterCard;
-site.twitterSite = page.twitterSite ? page.twitterSite : site.twitterSite;
+page.title = page.title ? page.title + ' | ' + site.name : site.name;
+page.description = page.description ? page.description : site.description;
+page.keyword = page.keyword ? page.keyword : site.keyword;
+page.ogTitle = page.ogTitle ? page.ogTitle : site.ogTitle;
+page.ogType = page.ogType ? page.ogType : site.ogType;
+page.ogDescription = page.ogDescription ? page.ogDescription : site.ogDescription;
+page.ogURL = page.ogURL ? page.ogURL : site.ogURL;
+page.ogImage = page.ogImage ? page.ogImage : site.ogImage;
+page.ogSitename = page.ogSitename ? page.ogSitename : site.ogSitename;
+page.twitterCard = page.twitterCard ? page.twitterCard : site.twitterCard;
+page.twitterSite = page.twitterSite ? page.twitterSite : site.twitterSite;
 -%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title><%= site.title %></title>
-<meta name="description" content="<%= site.description %>">
-<meta name="keyword" content="<%= site.keyword %>">
+<title><%= page.title %></title>
+<meta name="description" content="<%= page.description %>">
+<meta name="keyword" content="<%= page.keyword %>">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <%# SPリンク可否設定 -%>
 <meta name="format-detection" content="telephone=no,address=no,email=no">
 <%# open graph protocol -%>
-<meta property="og:title" content="<%= site.ogTitle %>">
-<meta property="og:type" content="<%= site.ogType %>">
-<meta property="og:description" content="<%= site.ogDescription %>">
-<meta property="og:url" content="<%= site.ogURL %>">
-<meta property="og:image" content="<%= site.ogImage %>">
-<meta property="og:site_name" content="<%= site.ogSitename %>">
+<meta property="og:title" content="<%= page.ogTitle %>">
+<meta property="og:type" content="<%= page.ogType %>">
+<meta property="og:description" content="<%= page.ogDescription %>">
+<meta property="og:url" content="<%= page.ogURL %>">
+<meta property="og:image" content="<%= page.ogImage %>">
+<meta property="og:site_name" content="<%= page.ogSitename %>">
 <%# twitter card（要サイト登録）-%>
-<meta name="twitter:card" content="<%= site.twitterCard %>">
-<meta name="twitter:site" content="<%= site.twitterSite %>">
+<meta name="twitter:card" content="<%= page.twitterCard %>">
+<meta name="twitter:site" content="<%= page.twitterSite %>">
 <%# apple-touch-icon -%>
 <%# iPad 2 and iPad mini (@1x) -%>
 <link rel="apple-touch-icon" sizes="76x76" href="<%= site.domain %>images/icon/76.png">
