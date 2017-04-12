@@ -3,8 +3,10 @@ const fs = require('fs');
 const sass = require('node-sass');
 const mkdirp = require('mkdirp');
 const glob = require('glob');
+const autoprefixer = require('autoprefixer');
 const config = require('./config');
 const obj = {};
+
 
 
 // SASSのコンパイル & ファイルコピー
@@ -25,8 +27,9 @@ obj.compile = (filePath) => {
 		const data = sass.renderSync({
 			data: file
 		});
+		const css = autoprefixer.process(data.css);
 
-		fs.writeFileSync(dest, data.css);
+		fs.writeFileSync(dest, css);
 	});
 };
 
@@ -37,5 +40,7 @@ obj.dest = () => {
 		});
 	});
 };
+
+
 
 module.exports = obj;
