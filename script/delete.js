@@ -1,5 +1,5 @@
-const del = require('del');
 const config = require('./config');
+const del = require('del');
 const util = require('./util');
 const obj = {};
 

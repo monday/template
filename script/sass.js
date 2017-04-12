@@ -1,10 +1,10 @@
+const config = require('./config');
 const path = require('path');
 const fs = require('fs');
 const sass = require('node-sass');
 const mkdirp = require('mkdirp');
 const glob = require('glob');
 const autoprefixer = require('autoprefixer');
-const config = require('./config');
 const obj = {};
 
 

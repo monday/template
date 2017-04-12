@@ -1,9 +1,9 @@
+const config = require('./config');
 const path = require('path');
 const glob = require('glob');
 const imagemin = require('imagemin');
 const imageminMozjpeg = require('imagemin-mozjpeg');
 const imageminPngquant = require('imagemin-pngquant');
-const config = require('./config');
 
 
 

@@ -1,9 +1,9 @@
+const config = require('./config');
 const path = require('path');
 const fs = require('fs');
 const ejs = require('ejs');
 const mkdirp = require('mkdirp');
 const glob = require('glob');
-const config = require('./config');
 const obj = {};
 
 
