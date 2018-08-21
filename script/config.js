@@ -22,6 +22,7 @@ const config = {
 // コピーするファイルの拡張子からglobを生成する
 config.copy.pattern = () => {
 	const copy = config.copy;
+	// TODO: for ofで回す様にする
 	const extension = [copy.files, copy.images, copy.fonts].reduce((a, b) => {
 		return a.concat(b);
 	});

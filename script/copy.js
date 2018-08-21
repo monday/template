@@ -10,7 +10,7 @@ const obj = {};
 
 // ファイルコピー
 obj.files = (src, encoding) => {
-	const dest = tool.toDest(src);
+	const dest = tool.convertSrcToDest(src);
 
 	new Promise((resolve, reject) => {
 		mkdirp(path.dirname(dest), (err) => {

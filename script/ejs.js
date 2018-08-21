@@ -12,11 +12,12 @@ const bs = require('browser-sync').get(config.name);
 const tool = require('./tool');
 const obj = {};
 
+
 // EJSのコンパイル & ファイルコピー
 obj.compile = async (filePath) => {
 	try{
-		const destPath = tool.toHTMLDestPath(filePath);
-		const dest = tool.toHTMLDestFullPath(filePath);
+		const destPath = tool.convertEJSDirnameToDestDirname(filePath);
+		const dest = tool.convertEJSPathToDestPath(filePath);
 
 		// async / awaitバージョン
 		const dir = await (() => {
@@ -30,7 +31,7 @@ obj.compile = async (filePath) => {
 				filename: filePath
 			});
 		})();
-		const writeFile = await (() => {
+		const _writeFile = await (() => {
 			return writeFile(dest, htmlFile({
 				// browsersyncの非公開メソッド
 				// immutable.jsが使用されているのでtoJSで元に戻す

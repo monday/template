@@ -4,40 +4,34 @@ const path = require('path');
 const obj = {};
 
 
-// srcをdestへ変換する
-obj.toDest = (filePath) => {
+/**
+ * filepath先頭のsrcをdestへ変換する
+*/
+obj.convertSrcToDest = (srcPath) => {
   const regExp = new RegExp('^' + config.src);
 
-  return filePath.replace(regExp, config.dest);
+  return srcPath.replace(regExp, config.dest);
 }
 
-
-// destをsrcへ変換する
-obj.toSrc = (filePath) => {
-  const regExp = new RegExp('^' + config.dest);
-
-  return filePath.replace(regExp, config.src);
-}
-
-
-// ejsのpathをdestのpathへ変換する
-obj.toHTMLDestPath = (filePath) => {
+/**
+ * ejsのpathをdestのdirectoryへ変換する
+*/
+obj.convertEJSDirnameToDestDirname = (ejsPath) => {
   const expression = new RegExp(`${config.src}[/|¥]ejs`, 'g');
-  const dirname = path.dirname(filePath).replace(expression, '');
+  const dirname = path.dirname(ejsPath).replace(expression, '');
 
   return `${config.dest}${dirname}/`;
 }
 
+/**
+ * ejsのpathをdestのpathへ変換する
+*/
+obj.convertEJSPathToDestPath = (ejsPath) => {
+  const destDirname = obj.convertEJSDirnameToDestDirname(ejsPath);
+  const extension = path.extname(ejsPath);
+  const basename = path.basename(ejsPath, extension);
 
-// ejsのpathをdestのファイルネーム付きpathへ変換する
-obj.toHTMLDestFullPath = (filePath) => {
-  const destPath = obj.toHTMLDestPath(filePath);
-  const extension = path.extname(filePath);
-  const basename = path.basename(filePath, extension);
-
-  return `${destPath}${basename}.html`;
+  return `${destDirname}${basename}.html`;
 }
-
-
 
 module.exports = obj;

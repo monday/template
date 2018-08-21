@@ -6,7 +6,7 @@ const obj = {};
 
 
 obj.exec = (filePath) => {
-	const expression = filePath ? tool.toDest(filePath) : config.dest;
+	const expression = filePath ? tool.convertSrcToDest(filePath) : config.dest;
 
 	del.sync(expression);
 }
