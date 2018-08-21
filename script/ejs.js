@@ -1,16 +1,16 @@
 'use strict';
 const config = require('./config');
+const util = require('util');
 const path = require('path');
 const fs = require('fs');
 const ejs = require('ejs');
-const mkdirp = require('mkdirp');
-const glob = require('glob');
+const mkdirp = util.promisify(require('mkdirp'));
+const glob = util.promisify(require('glob'));
+const readFile = util.promisify(fs.readFile);
+const writeFile = util.promisify(fs.writeFile);
 const bs = require('browser-sync').get(config.name);
-const util = require('util');
 const tool = require('./tool');
 const obj = {};
-
-
 
 // EJSのコンパイル & ファイルコピー
 obj.compile = async (filePath) => {
@@ -19,14 +19,11 @@ obj.compile = async (filePath) => {
 		const dest = tool.toHTMLDestFullPath(filePath);
 
 		// async / awaitバージョン
-		const mkdir = util.promisify(mkdirp);
-		const readFileAsync = util.promisify(fs.readFile);
-		const writeFileAsync = util.promisify(fs.writeFile);
 		const dir = await (() => {
-			mkdir(destPath);
+			mkdirp(destPath);
 		})();
 		const ejsFile = await (() => {
-			return readFileAsync(filePath, config.encoding);
+			return readFile(filePath, config.encoding);
 		})();
 		const htmlFile = await (() => {
 			return ejs.compile(ejsFile, {
@@ -34,7 +31,7 @@ obj.compile = async (filePath) => {
 			});
 		})();
 		const writeFile = await (() => {
-			return writeFileAsync(dest, htmlFile({
+			return writeFile(dest, htmlFile({
 				// browsersyncの非公開メソッド
 				// immutable.jsが使用されているのでtoJSで元に戻す
 				// 絶対パスのために必要
@@ -52,60 +49,18 @@ obj.compile = async (filePath) => {
 		console.log('error');
 		console.log(error);
 	}
-
-	// Promiseバージョン
-	//return new Promise((resolve, reject) => {
-	//	mkdirp(destPath, (err) => {
-	//		if(err) {
-	//			console.log('ejs');
-	//			console.log(err);
-	//			reject();
-	//			return;
-	//		}
-
-	//		const file = fs.readFileSync(filePath, config.encoding);
-	//		const data = ejs.compile(file, {
-	//			filename: filePath
-	//		});
-
-	//		fs.writeFile(dest, data({
-	//			// browsersyncの非公開メソッド
-	//			// immutable.jsが使用されているのでtoJSで元に戻す
-	//			// 絶対パスのために必要
-	//			// ejsテンプレートに
-	//			// {
-	//			// 	local: 'http://localhost:\d\d\d\d',
-	//			//	external: 'http://(IP):\d\d\d\d'
-	//			// }
-	//			// が渡る
-	//			urls: bs.instance.utils.getUrlOptions(bs.instance.options).toJS(),
-	//			env: process.argv[2],
-	//		}), (err) => {
-	//			if(err){
-	//				reject();
-	//			}
-
-	//			resolve();
-	//		})
-	//	});
-	//});
 };
 
-
-
-obj.dest = () => {
-	var promises = [];
-
-	return new Promise((resolve, reject) => {
-		glob(config.ejs.src, (err, files) => {
-			files.forEach((filePath, index) => {
-				promises.push(obj.compile(filePath));
-			});
-			resolve(promises);
+obj.dest = async () => {
+	try{
+		const files = await glob(config.ejs.src);
+		return files.map((file) => {
+			return obj.compile(file);
 		});
-	})
+	}catch(error){
+		console.log('error');
+		console.log(error);
+	}
 };
-
-
 
 module.exports = obj;
