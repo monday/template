@@ -1,12 +1,12 @@
 const config = require('./config');
 const del = require('del');
-const util = require('./util');
+const tool = require('./tool');
 const obj = {};
 
 
 
 obj.exec = (filePath) => {
-	const expression = filePath ? util.toDest(filePath) : config.dest;
+	const expression = filePath ? tool.toDest(filePath) : config.dest;
 
 	del.sync(expression);
 }

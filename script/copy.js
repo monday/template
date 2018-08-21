@@ -3,14 +3,14 @@ const path = require('path');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const glob = require('glob');
-const util = require('./util');
+const tool = require('./tool');
 const obj = {};
 
 
 
 // ファイルコピー
 obj.files = (src, encoding) => {
-	const dest = util.toDest(src);
+	const dest = tool.toDest(src);
 
 	new Promise((resolve, reject) => {
 		mkdirp(path.dirname(dest), (err) => {

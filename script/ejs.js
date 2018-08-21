@@ -6,8 +6,8 @@ const ejs = require('ejs');
 const mkdirp = require('mkdirp');
 const glob = require('glob');
 const bs = require('browser-sync').get(config.name);
-const tool = require('util');
-const util = require('./util');
+const util = require('util');
+const tool = require('./tool');
 const obj = {};
 
 
@@ -15,13 +15,13 @@ const obj = {};
 // EJSのコンパイル & ファイルコピー
 obj.compile = async (filePath) => {
 	try{
-		const destPath = util.toHTMLDestPath(filePath);
-		const dest = util.toHTMLDestFullPath(filePath);
+		const destPath = tool.toHTMLDestPath(filePath);
+		const dest = tool.toHTMLDestFullPath(filePath);
 
 		// async / awaitバージョン
-		const mkdir = tool.promisify(mkdirp);
-		const readFileAsync = tool.promisify(fs.readFile);
-		const writeFileAsync = tool.promisify(fs.writeFile);
+		const mkdir = util.promisify(mkdirp);
+		const readFileAsync = util.promisify(fs.readFile);
+		const writeFileAsync = util.promisify(fs.writeFile);
 		const dir = await (() => {
 			mkdir(destPath);
 		})();
