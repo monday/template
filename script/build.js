@@ -1,3 +1,4 @@
+'use strict';
 const config = require('./config');
 const path = require('path');
 const bs = require('browser-sync').create(config.name);
@@ -5,30 +6,37 @@ const glob = require('glob');
 const ejs = require('./ejs');
 const sass = require('./sass');
 const copy = require('./copy');
-const browserify = require('./browserify');
 const del = require('./delete');
 
 
 
-// エラーが発生しても落ちないように
+/**
+ * エラーが発生しても落ちないようにする
+*/
 process.on('uncaughtException', function(err) {
+	console.log('uncaughtException');
 	console.log(err);
 });
 
-// destディレクトリ削除
+/**
+ * destディレクトリを削除する
+*/
 del.exec();
 
-// ソースファイルのコンパイル & コピー
+/**
+ * ソースファイルをコンパイルしてコピーする
+*/
 ejs.dest();
 sass.dest();
 copy.dest();
-browserify.dest();
 
-// browsersync起動
+/**
+ * browsersyncを起動する
+*/
 bs.init({
-	server: config.dest + '/',
+	server: `${config.dest}/`,
 	open: false,
-	port: config.port,
+	//port: config.port,
 });
 
 // ソースファイルのwatch
