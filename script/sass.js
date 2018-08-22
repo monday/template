@@ -12,17 +12,19 @@ const autoprefixer = require('autoprefixer');
 const obj = {};
 
 
-// SASSのコンパイル & ファイルコピー
+/**
+ * SASSの個別コンパイル & ファイルコピー
+*/
 obj.compile = async (filePath) => {
 	try{
 		const extension = path.extname(filePath);
 		const filename = path.basename(filePath, extension);
-		const dirname = `${config.dest}${path.dirname(filePath).replace(config.src, '')}/`;
-		const destPath = `${dirname}${filename}.css`;
+		const destDirname = `${config.dest}${path.dirname(filePath).replace(config.src, '')}/`;
+		const destPath = `${destDirname}${filename}.css`;
 		const render = util.promisify(sass.render);
 
 		// ディレクトリの作成
-		const dir = await mkdirp(dirname);
+		const directory = await mkdirp(destDirname);
 		// sassファイルの読み込み
 		const file = await readFile(filePath, config.encoding);
 		// sassのコンパイル
@@ -39,11 +41,14 @@ obj.compile = async (filePath) => {
 	}
 };
 
+/**
+ * SASSの全体コンパイル & ファイルコピー
+*/
 obj.dest = async () => {
 	try{
-		const sassPathes = await glob(config.sass.src);
-		return sassPathes.map((sassPath) => {
-			obj.compile(sassPath);
+		const filePathes = await glob(config.sass.src);
+		return filePathes.map((filePath) => {
+			obj.compile(filePath);
 		});
 	}catch(error){
 		console.log('error');
