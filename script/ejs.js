@@ -9,29 +9,28 @@ const glob = util.promisify(require('glob'));
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 const bs = require('browser-sync').get(config.name);
-const tool = require('./tool');
 const obj = {};
 
 
 /**
  * EJSの個別コンパイル & ファイルコピー
 */
-obj.compile = async (ejsPath) => {
+obj.compile = async (filePath) => {
 	try{
-		const extension = path.extname(ejsPath);
-		const filename = path.basename(ejsPath, extension);
+		const extension = path.extname(filePath);
+		const filename = path.basename(filePath, extension);
 		const expression = new RegExp(`${config.src}[/|¥]ejs`, 'g');
-		const dirname = path.dirname(ejsPath).replace(expression, '');
+		const dirname = path.dirname(filePath).replace(expression, '');
 		const destDirname = `${config.dest}${dirname}/`;
 		const destPath = `${destDirname}${filename}.html`;
 
 		// EJSのPathからDestディレクトリを作成
 		const dir = await mkdirp(destDirname);
 		// EJSファイルの読み込み
-		const ejsFile = await readFile(ejsPath, config.encoding);
+		const ejsFile = await readFile(filePath, config.encoding);
 		// EJSファイルのコンパイル
 		const compileEJSFile = await ejs.compile(ejsFile, {
-			filename: ejsPath
+			filename: filePath
 		});
 		// HTMLファイルの書き込み
 		const write = await writeFile(destPath, compileEJSFile({
@@ -58,9 +57,9 @@ obj.compile = async (ejsPath) => {
 */
 obj.dest = async () => {
 	try{
-		const ejsPathes = await glob(config.ejs.src);
-		return ejsPathes.map((ejsPath) => {
-			return obj.compile(ejsPath);
+		const filePathes = await glob(config.ejs.src);
+		return filePathes.map((filePath) => {
+			return obj.compile(filePath);
 		});
 	}catch(error){
 		console.log('error');
