@@ -6,11 +6,11 @@ const fs = require('fs');
 const sass = require('node-sass');
 const mkdirp = util.promisify(require('mkdirp'));
 const glob = util.promisify(require('glob'));
-const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 const postcss = require('postcss');
 const autoprefixer = require('autoprefixer');
 const csso = require('postcss-csso');
+const tool = require('./tool');
 const obj = {};
 
 
@@ -21,8 +21,8 @@ obj.compile = async (filePath) => {
 	try{
 		const extension = path.extname(filePath);
 		const filename = path.basename(filePath, extension);
-		const dirname = path.dirname(filePath).replace(config.src, '').replace('scss', 'css');
-		const destDirname = `${config.dest}${dirname}/`;
+		const dirname = tool.convertSrcToDest(path.dirname(filePath)).replace('scss', 'css');
+		const destDirname = `${dirname}/`;
 		const destPath = `${destDirname}${filename}.css`;
 		const sourcemapPath = `${destDirname}${filename}.css.map`;
 		const render = util.promisify(sass.render);
