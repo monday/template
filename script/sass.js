@@ -8,7 +8,9 @@ const mkdirp = util.promisify(require('mkdirp'));
 const glob = util.promisify(require('glob'));
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
+const postcss = require('postcss');
 const autoprefixer = require('autoprefixer');
+const csso = require('postcss-csso');
 const obj = {};
 
 
@@ -21,20 +23,34 @@ obj.compile = async (filePath) => {
 		const filename = path.basename(filePath, extension);
 		const destDirname = `${config.dest}${path.dirname(filePath).replace(config.src, '')}/`;
 		const destPath = `${destDirname}${filename}.css`;
+		const sourcemapPath = `${destDirname}${filename}.css.map`;
 		const render = util.promisify(sass.render);
 
 		// ディレクトリの作成
 		const directory = await mkdirp(destDirname);
-		// sassファイルの読み込み
-		const file = await readFile(filePath, config.encoding);
 		// sassのコンパイル
-		const data = await render({
-			data: file
+		const preCssData = await render({
+			sourceMap: true,
+			file: filePath,
+			outFile: 'dest/css/style.css',
+			//outputStyle: 'compressed',
 		});
-		// vendorprefixの付与
-		const css = await autoprefixer.process(data.css);
 		// cssファイルの書き込み
-		const write = await writeFile(destPath, css);
+		const preCss = await writeFile(destPath, preCssData.css);
+		// sourcemapファイルの書き込み
+		const preSourcemap = await writeFile(sourcemapPath, preCssData.map);
+		// postcss処理
+		const cssData = await postcss([autoprefixer, csso]).process(preCssData.css, {
+			from: destPath,
+			to: destPath,
+			map: {
+				inline: false
+			}
+		});
+		// cssファイルの書き込み
+		const css = writeFile(destPath, cssData.css);
+		// sourcemapファイルの書き込み
+		const sourcemap = writeFile(sourcemapPath, cssData.map);
 	}catch(error){
 		console.log('error');
 		console.log(error);
@@ -46,10 +62,7 @@ obj.compile = async (filePath) => {
 */
 obj.dest = async () => {
 	try{
-		const filePathes = await glob(config.sass.src);
-		return filePathes.map((filePath) => {
-			obj.compile(filePath);
-		});
+		obj.compile(config.sass.src);
 	}catch(error){
 		console.log('error');
 		console.log(error);
