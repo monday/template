@@ -75,10 +75,10 @@ watchSass.on('ready', () => {
 const watchCopy = bs.watch(tool.getCopyGlob());
 watchCopy.on('ready', () => {
 	watchCopy.on('add', (file, stats) => {
-		copy.dest(file);
+		copy.file(file);
 		bs.reload();
 	}).on('change', (file, stats) => {
-		copy.dest(file);
+		copy.file(file);
 		bs.reload();
 	}).on('unlink', (file) => {
 		del.exec(file);

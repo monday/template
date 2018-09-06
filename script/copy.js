@@ -1,9 +1,13 @@
 'use strict';
 const config = require('./config');
+const util = require('util');
 const path = require('path');
 const fs = require('fs');
-const mkdirp = require('mkdirp');
+const mkdirp = util.promisify(require('mkdirp'));
 const glob = require('glob');
+//const glob = util.promisify(require('glob'));
+const readFile = util.promisify(fs.readFile);
+const writeFile = util.promisify(fs.writeFile);
 const tool = require('./tool');
 const obj = {};
 
@@ -11,28 +15,33 @@ const obj = {};
 /**
  * ファイルを個別コピーする
 */
-obj.files = (src, encoding) => {
-	const dest = tool.convertSrcToDest(src);
+obj.file = async (filePath, encoding) => {
+	try{
+		const destPath = tool.convertSrcToDest(filePath);
+		const destDirname = path.dirname(destPath);
 
-	new Promise((resolve, reject) => {
-		mkdirp(path.dirname(dest), (err) => {
-			fs.readFile(src, encoding, (err, data) => resolve(data));
-		})
-	})
-	.then((file) => fs.writeFileSync(dest, file))
-	.catch((err) => console.log(err));
+		// ディレクトリの作成
+		const directory = await mkdirp(destDirname);
+		// ファイルの読み込み
+		const fileData = await readFile(filePath, encoding);
+		// ファイルの書き込み
+		const file = writeFile(destPath, fileData);
+	}catch(error){
+		console.log('error');
+		console.log(error);
+	}
 }
 
 /**
  * ファイルを全体コピーする
 */
-obj.dest = (filePath) => {
-	const expression = filePath ? filePath : tool.getCopyGlob();
+obj.dest = () => {
+	const expression = tool.getCopyGlob();
 
 	glob(expression, (err, files) => {
 		files.forEach((path, index) => {
 			//obj.files(path, 'utf8');
-			obj.files(path);
+			obj.file(path);
 		});
 	});
 };
