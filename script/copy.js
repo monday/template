@@ -8,7 +8,7 @@ const obj = {};
 
 
 /**
- * ファイルをコピーする
+ * ファイルを個別コピーする
 */
 obj.files = (src, encoding) => {
 	const dest = tool.convertSrcToDest(src);
@@ -22,6 +22,9 @@ obj.files = (src, encoding) => {
 	.catch((err) => console.log(err));
 }
 
+/**
+ * ファイルを全体コピーする
+*/
 obj.dest = (filePath) => {
 	const expression = filePath ? filePath : tool.getCopyGlob();
 
