@@ -9,11 +9,12 @@ const config = {
 		watch: 'src/ejs/**/*.ejs'
 	},
 	sass: {
-		src: 'src/css/**/!(_)*.scss',
+		src: 'src/css/style.scss',
 		watch: 'src/css/**/*.scss'
 	},
 	copy: {
-		files: ['html', 'css'],
+		//files: ['html', 'css'],
+		files: [],
 		images: ['png', 'jpg', 'jpeg', 'gif', 'ico'],
 		fonts: ['eot', 'woff', 'woff2', 'ttf', 'otf'],
 	}
