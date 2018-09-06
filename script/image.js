@@ -1,3 +1,4 @@
+'use strict';
 const config = require('./config');
 const path = require('path');
 const glob = require('glob');
