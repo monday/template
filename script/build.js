@@ -7,6 +7,7 @@ const ejs = require('./ejs');
 const sass = require('./sass');
 const copy = require('./copy');
 const del = require('./delete');
+const tool = require('./tool');
 
 
 
@@ -71,7 +72,7 @@ watchSass.on('ready', () => {
 	});
 });
 
-const watchCopy = bs.watch(config.copy.pattern());
+const watchCopy = bs.watch(tool.getCopyGlob());
 watchCopy.on('ready', () => {
 	watchCopy.on('add', (file, stats) => {
 		copy.dest(file);

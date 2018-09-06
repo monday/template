@@ -1,3 +1,4 @@
+'use strict';
 const config = {
 	name: 'template',
 	//port: 3010,
@@ -9,28 +10,15 @@ const config = {
 		watch: 'src/ejs/**/*.ejs'
 	},
 	sass: {
-		src: 'src/css/style.scss',
-		watch: 'src/css/**/*.scss'
+		src: 'src/scss/style.scss',
+		watch: 'src/scss/**/*.scss'
 	},
 	copy: {
-		//files: ['html', 'css'],
+		//files: ['html', 'css', 'json'],
 		files: [],
 		images: ['png', 'jpg', 'jpeg', 'gif', 'ico'],
 		fonts: ['eot', 'woff', 'woff2', 'ttf', 'otf'],
 	}
 }
-
-// コピーするファイルの拡張子からglobを生成する
-config.copy.pattern = () => {
-	const copy = config.copy;
-	// TODO: for ofで回す様にする
-	const extension = [copy.files, copy.images, copy.fonts].reduce((a, b) => {
-		return a.concat(b);
-	});
-
-	return 'src/**/*.@(' + extension.join('|') + ')'
-};
-
-
 
 module.exports = config;

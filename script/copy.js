@@ -7,8 +7,9 @@ const tool = require('./tool');
 const obj = {};
 
 
-
-// ファイルコピー
+/**
+ * ファイルをコピーする
+*/
 obj.files = (src, encoding) => {
 	const dest = tool.convertSrcToDest(src);
 
@@ -21,10 +22,8 @@ obj.files = (src, encoding) => {
 	.catch((err) => console.log(err));
 }
 
-
-
 obj.dest = (filePath) => {
-	const expression = filePath ? filePath : config.copy.pattern();
+	const expression = filePath ? filePath : tool.getCopyGlob();
 
 	glob(expression, (err, files) => {
 		files.forEach((path, index) => {
@@ -33,7 +32,5 @@ obj.dest = (filePath) => {
 		});
 	});
 };
-
-
 
 module.exports = obj;
