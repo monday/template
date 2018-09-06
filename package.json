@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node script/build.js",
     "image": "node script/image.js",
+    "sass": "./node_modules/node-sass/bin/node-sass --source-map true src/css/style.scss dest/css/style.css",
     "del": "node script/delete.js"
   },
   "babel": {
@@ -20,7 +21,7 @@
   "license": "ISC",
   "devDependencies": {
     "autoprefixer": "^9.0.1",
-    "browser-sync": "2.24.6",
+    "browser-sync": "^2.24.7",
     "del": "^3.0.0",
     "ejs": "2.6.1",
     "glob": "7.1.2",
@@ -28,6 +29,8 @@
     "imagemin-mozjpeg": "^7.0.0",
     "imagemin-pngquant": "^6.0.0",
     "mkdirp": "0.5.1",
-    "node-sass": "4.9.2"
+    "node-sass": "^4.9.3",
+    "postcss": "^7.0.2",
+    "postcss-csso": "^3.0.0"
   }
 }
