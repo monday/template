@@ -25,15 +25,15 @@ obj.compile = async (filePath) => {
 		const destPath = `${destDirname}${filename}.html`;
 
 		// EJSのPathからDestディレクトリを作成
-		const dir = await mkdirp(destDirname);
+		const directory = await mkdirp(destDirname);
 		// EJSファイルの読み込み
-		const ejsFile = await readFile(filePath, config.encoding);
+		const ejsData = await readFile(filePath, config.encoding);
 		// EJSファイルのコンパイル
-		const compileEJSFile = await ejs.compile(ejsFile, {
+		const htmlData = await ejs.compile(ejsData, {
 			filename: filePath
 		});
 		// HTMLファイルの書き込み
-		const write = await writeFile(destPath, compileEJSFile({
+		const html = await writeFile(destPath, htmlData({
 			// browsersyncの非公開メソッド
 			// immutable.jsが使用されているのでtoJSで元に戻す
 			// 絶対パスのために必要
