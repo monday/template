@@ -21,7 +21,8 @@ obj.compile = async (filePath) => {
 	try{
 		const extension = path.extname(filePath);
 		const filename = path.basename(filePath, extension);
-		const destDirname = `${config.dest}${path.dirname(filePath).replace(config.src, '')}/`;
+		const dirname = path.dirname(filePath).replace(config.src, '').replace('scss', 'css');
+		const destDirname = `${config.dest}${dirname}/`;
 		const destPath = `${destDirname}${filename}.css`;
 		const sourcemapPath = `${destDirname}${filename}.css.map`;
 		const render = util.promisify(sass.render);
