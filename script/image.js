@@ -39,7 +39,7 @@ obj.dest = async () => {
 			promises.push(obj.compress(file, tool.convertSrcToDest(path.dirname(file))));
 		}
 		const commplete = await Promise.all(promises);
-		console.log('finish all images compresse');
+		console.log('finish all images compresse.');
 	}catch(error){
 		console.log('error');
 		console.log(error);

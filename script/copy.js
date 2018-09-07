@@ -45,7 +45,7 @@ obj.dest = async () => {
 			promises.push(obj.file(file));
 		}
 		const complete = await Promise.all(promises);
-		console.log('finish all file copy');
+		console.log('finish all file copy.');
 	}catch(error){
 		console.log('error');
 		console.log(error);

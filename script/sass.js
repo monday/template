@@ -67,7 +67,7 @@ obj.dest = async () => {
 	try{
 		const promises = await obj.compile(config.sass.src);
 		const complete = await Promise.all(promises);
-		console.log('finish sass compile');
+		console.log('finish all sass compile.');
 	}catch(error){
 		console.log('error');
 		console.log(error);

@@ -33,7 +33,7 @@ obj.compile = async (filePath) => {
 			filename: filePath
 		});
 		// HTMLファイルの書き込み
-		const html = await writeFile(destPath, htmlData({
+		return writeFile(destPath, htmlData({
 			// browsersyncの非公開メソッド
 			// immutable.jsが使用されているのでtoJSで元に戻す
 			// 絶対パスのために必要
@@ -57,10 +57,13 @@ obj.compile = async (filePath) => {
 */
 obj.dest = async () => {
 	try{
-		const filePathes = await glob(config.ejs.src);
-		return filePathes.map((filePath) => {
-			return obj.compile(filePath);
-		});
+		const files = await glob(config.ejs.src);
+		let promises = [];
+		for(let file of files){
+			promises.push(obj.compile(file));
+		}
+		const complete = await Promise.all(promises);
+		console.log('finish all ejs compile.');
 	}catch(error){
 		console.log('error');
 		console.log(error);
