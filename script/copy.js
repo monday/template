@@ -4,8 +4,8 @@ const util = require('util');
 const path = require('path');
 const fs = require('fs');
 const mkdirp = util.promisify(require('mkdirp'));
-const glob = require('glob');
-//const glob = util.promisify(require('glob'));
+//const glob = require('glob');
+const glob = util.promisify(require('glob'));
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 const tool = require('./tool');
@@ -25,7 +25,7 @@ obj.file = async (filePath, encoding) => {
 		// ファイルの読み込み
 		const fileData = await readFile(filePath, encoding);
 		// ファイルの書き込み
-		const file = writeFile(destPath, fileData);
+		return writeFile(destPath, fileData);
 	}catch(error){
 		console.log('error');
 		console.log(error);
@@ -35,15 +35,21 @@ obj.file = async (filePath, encoding) => {
 /**
  * ファイルを全体コピーする
 */
-obj.dest = () => {
-	const expression = tool.getCopyGlob();
+obj.dest = async () => {
+	try{
+		const expression = tool.getCopyGlob();
+		const files = await glob(expression);
+		let promises = [];
 
-	glob(expression, (err, files) => {
-		files.forEach((path, index) => {
-			//obj.files(path, 'utf8');
-			obj.file(path);
-		});
-	});
+		for(let file of files){
+			promises.push(obj.file(file));
+		}
+		const complete = await Promise.all(promises);
+		console.log('finish all file copy');
+	}catch(error){
+		console.log('error');
+		console.log(error);
+	}
 };
 
 module.exports = obj;
