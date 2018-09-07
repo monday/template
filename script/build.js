@@ -10,7 +10,6 @@ const del = require('./delete');
 const tool = require('./tool');
 
 
-
 /**
  * エラーが発生しても落ちないようにする
 */
@@ -41,19 +40,47 @@ bs.init({
 });
 
 // ソースファイルのwatch
-// jsのwatchはwatchifyで行う
 const watchEjs = bs.watch(config.ejs.watch);
 watchEjs.on('ready', () => {
-	watchEjs.on('add', (file, stats) => {
-		ejs.dest();
-		bs.reload();
-	}).on('change', (file, stats) => {
-		ejs.dest();
-		bs.reload();
-	}).on('unlink', (file) => {
-		del.exec(file);
-		ejs.dest();
-		bs.reload();
+	watchEjs.on('add', async (file, stats) => {
+		try{
+			if(isPartial(file)){
+				ejs.dest();
+			}else{
+				const complete = await ejs.compile(file);
+				console.log(`finish ${file} compile.`);
+			}
+			bs.reload();
+		}catch(error){
+			console.log('error');
+			console.log(error);
+		}
+	}).on('change', async (file, stats) => {
+		try{
+			if(isPartial(file)){
+				ejs.dest();
+			}else{
+				const complete = await ejs.compile(file);
+				console.log(`finish ${file} compile.`);
+			}
+			bs.reload();
+		}catch(error){
+			console.log('error');
+			console.log(error);
+		}
+	}).on('unlink', async (file) => {
+		try{
+			if(isPartial(file)){
+				ejs.dest();
+			}else{
+				del.exec(tool.convertSrcToDest(file));
+				console.log(`finish ${file} delete.`);
+			}
+			bs.reload();
+		}catch(error){
+			console.log('error');
+			console.log(error);
+		}
 	});
 });
 
@@ -66,7 +93,6 @@ watchSass.on('ready', () => {
 		sass.dest();
 		bs.reload();
 	}).on('unlink', (file) => {
-		del.exec(file);
 		sass.dest();
 		bs.reload();
 	});
@@ -74,14 +100,36 @@ watchSass.on('ready', () => {
 
 const watchCopy = bs.watch(tool.getCopyGlob());
 watchCopy.on('ready', () => {
-	watchCopy.on('add', (file, stats) => {
-		copy.file(file);
-		bs.reload();
-	}).on('change', (file, stats) => {
-		copy.file(file);
-		bs.reload();
+	watchCopy.on('add', async (file, stats) => {
+		try{
+			const complete = await copy.file(file);
+			console.log(`finish ${file} add.`);
+			bs.reload();
+		}catch(error){
+			console.log('error');
+			console.log(error);
+		}
+	}).on('change', async (file, stats) => {
+		try{
+			const complete = await copy.file(file);
+			console.log(`finish ${file} change.`);
+			bs.reload();
+		}catch(error){
+			console.log('error');
+			console.log(error);
+		}
 	}).on('unlink', (file) => {
-		del.exec(file);
-		bs.reload();
+		try{
+			del.exec(tool.convertSrcToDest(file));
+			console.log(`finish ${file} delete.`);
+			bs.reload();
+		}catch(error){
+			console.log('error');
+			console.log(error);
+		}
 	});
 });
+
+const isPartial = (filePath) => {
+	return /\/partial\//.test(filePath);
+}
