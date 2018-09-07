@@ -74,6 +74,4 @@ obj.dest = async () => {
 	}
 };
 
-
-
 module.exports = obj;

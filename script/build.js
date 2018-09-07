@@ -2,7 +2,6 @@
 const config = require('./config');
 const path = require('path');
 const bs = require('browser-sync').create(config.name);
-const glob = require('glob');
 const ejs = require('./ejs');
 const sass = require('./sass');
 const copy = require('./copy');

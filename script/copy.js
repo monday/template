@@ -4,7 +4,6 @@ const util = require('util');
 const path = require('path');
 const fs = require('fs');
 const mkdirp = util.promisify(require('mkdirp'));
-//const glob = require('glob');
 const glob = util.promisify(require('glob'));
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
