@@ -52,6 +52,8 @@ obj.compile = async (filePath) => {
 		const css = writeFile(destPath, cssData.css);
 		// sourcemapファイルの書き込み
 		const sourcemap = writeFile(sourcemapPath, cssData.map);
+
+		return [css, sourcemap];
 	}catch(error){
 		console.log('error');
 		console.log(error);
@@ -63,7 +65,9 @@ obj.compile = async (filePath) => {
 */
 obj.dest = async () => {
 	try{
-		obj.compile(config.sass.src);
+		const promises = await obj.compile(config.sass.src);
+		const complete = await Promise.all(promises);
+		console.log('finish sass compile');
 	}catch(error){
 		console.log('error');
 		console.log(error);
