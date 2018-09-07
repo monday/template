@@ -1,29 +1,57 @@
 'use strict';
 const config = require('./config');
+const util = require('util');
 const path = require('path');
-const glob = require('glob');
+const glob = util.promisify(require('glob'));
 const imagemin = require('imagemin');
 const imageminMozjpeg = require('imagemin-mozjpeg');
 const imageminPngquant = require('imagemin-pngquant');
+const tool = require('./tool');
+const obj = {};
 
 
-
-// imageminでpngとjpgを圧縮する
-const image = (input, output) => {
-	imagemin([input], output, {
-		plugins: [
-			imageminMozjpeg(),
-			imageminPngquant({quality: '65-80'})
-		]
-	}).then(files => {
-		//console.log(files);
-		//=> [{data: <Buffer 89 50 4e …>, path: 'build/images/foo.jpg'}, …]
-	})
+/**
+ * jpgとpngを圧縮する
+*/
+obj.compress = async (input, output) => {
+	try {
+		return imagemin([input], output, {
+			plugins: [
+				imageminMozjpeg(),
+				imageminPngquant({quality: '65-80'})
+			]
+		})
+	}catch(error){
+		console.log('error');
+		console.log(error);
+	}
 };
 
+/**
+ * 全てのjpgとpngを圧縮する
+*/
+obj.dest = async () => {
+	try{
+		const files = await glob(`src/**/*.@(${config.copy.images.join('|')})`);
+		let promises = [];
 
-glob('src/**/*.@(' + config.copy.images.join('|') + ')', (err, files) => {
-	files.forEach((file, index) => {
-		image(file, path.dirname(file).replace(config.src, config.dest));
-	});
-});
+		for(let file of files){
+			promises.push(obj.compress(file, tool.convertSrcToDest(path.dirname(file))));
+		}
+		const commplete = await Promise.all(promises);
+		console.log('finish all images compresse');
+	}catch(error){
+		console.log('error');
+		console.log(error);
+	}
+}
+
+/**
+ * コマンドから実行する
+ * （画像全コンパイル）
+*/
+if(/image\.js/.test(process.argv[1])){
+	obj.dest();
+}
+
+module.exports = obj;
