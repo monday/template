@@ -11,6 +11,11 @@ class Polygon {
 		this.height = height;
 		this.width = width;
 	}
+
+	getArea(){
+		return this.height * this.width;
+	}
 }
 
 const polygon = new Polygon(10, 10);
+console.log(polygon.getArea());

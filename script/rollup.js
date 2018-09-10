@@ -4,11 +4,11 @@ const util = require('util');
 const path = require('path');
 const fs = require('fs');
 const rollup = require('rollup');
+const resolve = require('rollup-plugin-node-resolve');
+const commonjs = require('rollup-plugin-commonjs');
+const babel = require('rollup-plugin-babel');
 const mkdirp = util.promisify(require('mkdirp'));
-const glob = util.promisify(require('glob'));
-const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
-const bs = require('browser-sync').get(config.name);
 const tool = require('./tool');
 const obj = {};
 
@@ -19,11 +19,19 @@ const obj = {};
 obj.compile = async (filePath) => {
 	const inputOptions = {
 		input: filePath,
+		plugins: [
+			resolve(),
+			commonjs(),
+			babel({
+				exclude: 'node_modules/**' // only transpile our source code
+			})
+		],
 	};
 	const outputOptions = {
 		output: {
 			format: 'iife',
 			name: 'myBundle',
+			sourcemap: true,
 		},
 	};
 	const destPath = tool.convertSrcToDest(filePath);

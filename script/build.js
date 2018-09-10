@@ -99,6 +99,20 @@ watchSass.on('ready', () => {
 	});
 });
 
+const watchJs = bs.watch(config.js.watch);
+watchJs.on('ready', () => {
+	watchJs.on('add', (file, stats) => {
+		rollup.dest();
+		bs.reload();
+	}).on('change', (file, stats) => {
+		rollup.dest();
+		bs.reload();
+	}).on('unlink', (file) => {
+		rollup.dest();
+		bs.reload();
+	});
+});
+
 const watchCopy = bs.watch(tool.getCopyGlob());
 watchCopy.on('ready', () => {
 	watchCopy.on('add', async (file, stats) => {
