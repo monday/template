@@ -21,7 +21,7 @@ process.on('uncaughtException', function(err) {
 /**
  * destディレクトリを削除する
 */
-del.exec();
+//del.exec();
 
 /**
  * ソースファイルをコンパイルしてコピーする
