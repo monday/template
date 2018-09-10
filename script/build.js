@@ -4,6 +4,7 @@ const path = require('path');
 const bs = require('browser-sync').create(config.name);
 const ejs = require('./ejs');
 const sass = require('./sass');
+const rollup = require('./rollup');
 const copy = require('./copy');
 const del = require('./delete');
 const tool = require('./tool');
@@ -25,9 +26,10 @@ del.exec();
 /**
  * ソースファイルをコンパイルしてコピーする
 */
-ejs.dest();
 sass.dest();
+rollup.dest();
 copy.dest();
+ejs.dest();
 
 /**
  * browsersyncを起動する

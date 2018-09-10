@@ -13,6 +13,10 @@ const config = {
 		src: 'src/scss/style.scss',
 		watch: 'src/scss/**/*.scss'
 	},
+	js: {
+		src: 'src/js/app.js',
+		watch: 'src/js/**/*.js'
+	},
 	copy: {
 		//files: ['html', 'css', 'json'],
 		files: [],
