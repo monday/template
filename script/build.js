@@ -37,7 +37,7 @@ ejs.dest();
 bs.init({
 	server: `${config.dest}/`,
 	open: false,
-	//port: config.port,
+	port: config.port,
 });
 
 // ソースファイルのwatch

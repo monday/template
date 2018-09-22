@@ -1,7 +1,7 @@
 'use strict';
 const config = {
 	name: 'template',
-	//port: 3010,
+	port: 3010,
 	encoding: 'utf8',
 	src: 'src',
 	dest: 'dest',
