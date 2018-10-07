@@ -1,5 +1,3 @@
-import {Stage} from './partial/a.js';
-import {b} from './partial/b.js';
-import {c} from './partial/c.js';
+import {Stage} from './partial/stage.js';
 
 const stage = new Stage(document.getElementById('stage'));
