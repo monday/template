@@ -15,6 +15,46 @@ var page = {
 
 function content(site){
 -%>
-	<h1>contents!!</h1>
+<main>
+	<article>
+		<div class="cover">
+			<canvas id="tutorial" width="150" height="150"></canvas>
+			<h1 class="cover--title">タイトル！！</h1>
+			<p class="cover--date">
+				<time datetime="2019-3-21">2019.3.21</time>
+			</p>
+		</div>
+		<section>
+			<div class="block">
+				<h2 class="heading--lv1">lv1タイトル</h2>
+				<p class="text">テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
+			</div>
+			<section>
+				<div class="block">
+					<h3 class="heading--lv2">lv2タイトル</h3>
+					<p class="text">テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
+				</div>
+				<section>
+					<div class="block">
+						<h4 class="heading--lv3">lv3タイトル</h4>
+						<p class="text">テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
+					</div>
+					<section>
+						<div class="block">
+							<h5 class="heading--lv4">lv4タイトル</h5>
+							<p class="text">テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
+						</div>
+						<section>
+							<div class="block">
+								<h6 class="heading--lv5">lv5タイトル</h6>
+								<p class="text">テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
+							</div>
+						</section>
+					</section>
+				</section>
+			</section>
+		</section>
+	</article>
+</main>
 <%}; -%>
 <% include partial/_layout -%>
