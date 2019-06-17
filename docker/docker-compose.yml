@@ -1,0 +1,21 @@
+version: "3"
+services:
+  apache:
+    container_name: apache
+    build: ./apache
+    ports:
+      - 9000:80
+
+  python:
+    container_name: python
+    build: ./python
+    tty: true
+    ports:
+      - 9001:5000
+    volumes:
+      - ./python:/usr/src/app
+    working_dir: /usr/src/app
+
+  #mysql:
+  #  container_name: mysql
+  #  image: mysql:8.0.16
