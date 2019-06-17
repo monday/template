@@ -30,14 +30,18 @@ obj.compile = async (filePath) => {
 		// ディレクトリの作成
 		const directory = await mkdirp(destDirname);
 		// sassのコンパイル
-		const preCssData = await render({
-			sourceMap: true,
+		//const preCssData = await render({
+		//	sourceMap: true,
+		//	file: filePath,
+		//	outFile: destPath,
+		//});
+		const preCssData = sass.renderSync({
 			file: filePath,
-			outFile: 'dest/css/style.css',
-			//outputStyle: 'compressed',
-		});
-		// cssファイルの書き込み
-		const preCss = await writeFile(destPath, preCssData.css);
+			sourceMap: true,
+			outFile: destPath,
+		})
+		//// cssファイルの書き込み
+		//const preCss = await writeFile(_destPath, preCssData.css);
 		// sourcemapファイルの書き込み
 		const preSourcemap = await writeFile(sourcemapPath, preCssData.map);
 		// postcss処理
@@ -45,13 +49,14 @@ obj.compile = async (filePath) => {
 			from: destPath,
 			to: destPath,
 			map: {
-				inline: false
+				inline: false,
+				//prev: false,
 			}
 		});
 		// cssファイルの書き込み
-		const css = writeFile(destPath, cssData.css);
+		const css = await writeFile(destPath, cssData.css);
 		// sourcemapファイルの書き込み
-		const sourcemap = writeFile(sourcemapPath, cssData.map);
+		const sourcemap = await writeFile(sourcemapPath, cssData.map);
 
 		return [css, sourcemap];
 	}catch(error){
