@@ -1,16 +1,23 @@
-
 // base
 //-----------------------------------------------------
 html {
-	font-size :10px;
-	font-family: 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', 'Meiryo', 'メイリオ', 'Osaka', 'MS PGothic', arial, helvetica, sans-serif;
+	font-size : 62.5%;
+	font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, "Helvetica Neue", Helvetica, sans-serif;
+	// 古いmacでもヒラギノを細く表示する
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
 }
 
 a {
 	text-decoration: none;
 }
 
-// variable
+article {
+	margin: 0 1.5rem;
+	font-size: 1.5rem;
+}
+
+// common variable
 //-----------------------------------------------------
 $images: '../images/';
 
