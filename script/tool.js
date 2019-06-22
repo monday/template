@@ -1,6 +1,6 @@
 'use strict';
 const config = require('./config');
-const path = require('path');
+//const path = require('path');
 const obj = {};
 
 
@@ -11,7 +11,7 @@ obj.convertSrcToDest = (srcPath) => {
   const regExp = new RegExp('^' + config.src);
 
   return srcPath.replace(regExp, config.dest);
-}
+};
 
 /**
  * コピーするファイルの拡張子からglobを生成する

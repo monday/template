@@ -43,7 +43,7 @@ obj.compile = async (filePath) => {
 		// TODO: code splitに対応する
 		const code = output[0].code;
 		const map = output[0].map;
-		const directory = await mkdirp(path.dirname(destPath));
+		await mkdirp(path.dirname(destPath));
 		const codeFile = writeFile(destPath, code);
 		const mapFile = writeFile(destPath.replace(/\.js/, '.map.js'), map);
 
@@ -60,7 +60,7 @@ obj.compile = async (filePath) => {
 obj.dest = async () => {
 	try{
 		const promises = await obj.compile(config.js.src);
-		const complete = await Promise.all(promises);
+		await Promise.all(promises);
 		console.log('finish all js compile.');
 	}catch(error){
 		console.log('error');

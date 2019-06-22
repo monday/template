@@ -20,7 +20,7 @@ obj.compress = async (input, output) => {
 				imageminMozjpeg(),
 				imageminPngquant({quality: '65-80'})
 			]
-		})
+		});
 	}catch(error){
 		console.log('error');
 		console.log(error);
@@ -38,13 +38,13 @@ obj.dest = async () => {
 		for(let file of files){
 			promises.push(obj.compress(file, tool.convertSrcToDest(path.dirname(file))));
 		}
-		const commplete = await Promise.all(promises);
+		await Promise.all(promises);
 		console.log('finish all images compresse.');
 	}catch(error){
 		console.log('error');
 		console.log(error);
 	}
-}
+};
 
 /**
  * コマンドから実行する

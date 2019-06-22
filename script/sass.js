@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const sass = require('node-sass');
 const mkdirp = util.promisify(require('mkdirp'));
-const glob = util.promisify(require('glob'));
+//const glob = util.promisify(require('glob'));
 const writeFile = util.promisify(fs.writeFile);
 const postcss = require('postcss');
 const autoprefixer = require('autoprefixer');
@@ -25,10 +25,10 @@ obj.compile = async (filePath) => {
 		const destDirname = `${dirname}/`;
 		const destPath = `${destDirname}${filename}.css`;
 		const sourcemapPath = `${destDirname}${filename}.css.map`;
-		const render = util.promisify(sass.render);
+		//const render = util.promisify(sass.render);
 
 		// ディレクトリの作成
-		const directory = await mkdirp(destDirname);
+		await mkdirp(destDirname);
 		// sassのコンパイル
 		//const preCssData = await render({
 		//	sourceMap: true,
@@ -39,11 +39,11 @@ obj.compile = async (filePath) => {
 			file: filePath,
 			sourceMap: true,
 			outFile: destPath,
-		})
+		});
 		//// cssファイルの書き込み
 		//const preCss = await writeFile(_destPath, preCssData.css);
 		// sourcemapファイルの書き込み
-		const preSourcemap = await writeFile(sourcemapPath, preCssData.map);
+		await writeFile(sourcemapPath, preCssData.map);
 		// postcss処理
 		const cssData = await postcss([autoprefixer, csso]).process(preCssData.css, {
 			from: destPath,
@@ -71,7 +71,7 @@ obj.compile = async (filePath) => {
 obj.dest = async () => {
 	try{
 		const promises = await obj.compile(config.sass.src);
-		const complete = await Promise.all(promises);
+		await Promise.all(promises);
 		console.log('finish all sass compile.');
 	}catch(error){
 		console.log('error');

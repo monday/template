@@ -23,6 +23,6 @@ const config = {
 		images: ['png', 'jpg', 'jpeg', 'gif', 'ico'],
 		fonts: ['eot', 'woff', 'woff2', 'ttf', 'otf'],
 	}
-}
+};
 
 module.exports = config;

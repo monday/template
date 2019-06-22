@@ -25,7 +25,7 @@ obj.compile = async (filePath) => {
 		const destPath = `${destDirname}${filename}.html`;
 
 		// EJSのPathからDestディレクトリを作成
-		const directory = await mkdirp(destDirname);
+		await mkdirp(destDirname);
 		// EJSファイルの読み込み
 		const ejsData = await readFile(filePath, config.encoding);
 		// EJSファイルのコンパイル
@@ -47,7 +47,7 @@ obj.compile = async (filePath) => {
 			env: process.argv[2],
 		}));
 	}catch(error){
-		console.log('error');
+		console.log('ejs compile error');
 		console.log(error);
 	}
 };
@@ -62,10 +62,10 @@ obj.dest = async () => {
 		for(let file of files){
 			promises.push(obj.compile(file));
 		}
-		const complete = await Promise.all(promises);
+		await Promise.all(promises);
 		console.log('finish all ejs compile.');
 	}catch(error){
-		console.log('error');
+		console.log('ejs dest error');
 		console.log(error);
 	}
 };

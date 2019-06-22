@@ -13,7 +13,7 @@ obj.exec = (filePath) => {
 	const expression = filePath ? tool.convertSrcToDest(filePath) : config.dest;
 
 	del.sync(expression);
-}
+};
 
 /**
  * コマンドから実行する
