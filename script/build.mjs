@@ -1,4 +1,5 @@
 import {config} from './config';
+import * as path from 'path';
 import browserSync from 'browser-sync';
 import * as ejs from './ejs';
 import * as sass from './sass';
@@ -144,5 +145,5 @@ watchCopy.on('ready', () => {
 });
 
 const isPartial = (filePath) => {
-	return /\/partial\//.test(filePath);
+	return path.dirname(filePath).split(path.sep).some((name) => name === 'partial');
 };

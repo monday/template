@@ -16,16 +16,14 @@ const writeFile = promisify(fs.writeFile);
 */
 export const compile = async (filePath) => {
 	try{
-		const extension = path.extname(filePath);
-		const filename = path.basename(filePath, extension);
-		const expression = new RegExp(`${config.src}[/|¥]ejs`, 'g');
-		const dirname = path.dirname(filePath).replace(expression, '');
-		const destDirname = `${config.dest}${dirname}/`;
-		const destPath = `${destDirname}${filename}.html`;
+		const parse = path.parse(filePath);
+		let dir = config.dest;
+		parse.dir.split(path.sep).slice(2).forEach((name) => dir = path.join(dir, name));
+		const destPath = path.join(dir, `${parse.name}.html`);
 		const bs = broserSync.get(config.name);
 
 		// EJSのPathからDestディレクトリを作成
-		await mkdirp(destDirname);
+		await mkdirp(dir);
 		// EJSファイルの読み込み
 		const ejsData = await readFile(filePath, config.encoding);
 		// EJSファイルのコンパイル
@@ -61,7 +59,7 @@ export const dest = async () => {
 		const files = await glob(config.ejs.src);
 		let promises = [];
 		for(let file of files){
-			promises.push(compile(file));
+			promises.push(compile(path.normalize(file)));
 		}
 		await Promise.all(promises);
 		console.log('finish all ejs compile.');
