@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "node script/build.js",
-    "image": "node script/image.js",
-    "sass": "./node_modules/node-sass/bin/node-sass --source-map true src/css/style.scss dest/css/style.css",
-    "del": "node script/delete.js"
+    "start": "node --experimental-modules script/build.mjs",
+    "image": "node --experimental-modules script/image.mjs",
+    "del": "node --experimental-modules script/delete.mjs",
+    "sass": "./node_modules/node-sass/bin/node-sass --source-map true src/css/style.scss dest/css/style.css"
   },
   "browserslist": [
     "last 1 versions",
-    "ie >= 9"
+    "ie >= 11"
   ],
   "author": "",
   "license": "ISC",

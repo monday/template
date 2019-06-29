@@ -1,23 +1,21 @@
 'use strict';
-const config = require('./config');
-const util = require('util');
-const path = require('path');
-const fs = require('fs');
-const sass = require('node-sass');
-const mkdirp = util.promisify(require('mkdirp'));
-//const glob = util.promisify(require('glob'));
-const writeFile = util.promisify(fs.writeFile);
-const postcss = require('postcss');
-const autoprefixer = require('autoprefixer');
-const csso = require('postcss-csso');
-const tool = require('./tool');
-const obj = {};
-
+import {config} from './config';
+import {promisify} from 'util';
+import * as path from 'path';
+import * as fs from 'fs';
+import sass from 'node-sass';
+import postcss from 'postcss';
+import autoprefixer from 'autoprefixer';
+import csso from 'postcss-csso';
+import * as tool from './tool';
+import _mkdirp from 'mkdirp';
+const mkdirp = promisify(_mkdirp);
+const writeFile = promisify(fs.writeFile);
 
 /**
  * SASSの個別コンパイル & ファイルコピー
 */
-obj.compile = async (filePath) => {
+export const compile = async (filePath) => {
 	try{
 		const extension = path.extname(filePath);
 		const filename = path.basename(filePath, extension);
@@ -60,7 +58,7 @@ obj.compile = async (filePath) => {
 
 		return [css, sourcemap];
 	}catch(error){
-		console.log('error');
+		console.log('sass compile error');
 		console.log(error);
 	}
 };
@@ -68,15 +66,13 @@ obj.compile = async (filePath) => {
 /**
  * SASSの全体コンパイル & ファイルコピー
 */
-obj.dest = async () => {
+export const dest = async () => {
 	try{
-		const promises = await obj.compile(config.sass.src);
+		const promises = await compile(config.sass.src);
 		await Promise.all(promises);
 		console.log('finish all sass compile.');
 	}catch(error){
-		console.log('error');
+		console.log('sass dest error');
 		console.log(error);
 	}
 };
-
-module.exports = obj;

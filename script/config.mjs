@@ -1,5 +1,4 @@
-'use strict';
-const config = {
+export const config = {
 	name: 'template',
 	//port: 3010,
 	encoding: 'utf8',
@@ -20,9 +19,7 @@ const config = {
 	copy: {
 		//files: ['html', 'css', 'json'],
 		files: [],
-		images: ['png', 'jpg', 'jpeg', 'gif', 'ico'],
+		images: ['png', 'jpg', 'jpeg', 'gif', 'ico', 'svg'],
 		fonts: ['eot', 'woff', 'woff2', 'ttf', 'otf'],
 	}
 };
-
-module.exports = config;

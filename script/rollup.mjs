@@ -1,22 +1,21 @@
 'use strict';
-const config = require('./config');
-const util = require('util');
-const path = require('path');
-const fs = require('fs');
-const rollup = require('rollup');
-const resolve = require('rollup-plugin-node-resolve');
-const commonjs = require('rollup-plugin-commonjs');
-const babel = require('rollup-plugin-babel');
-const mkdirp = util.promisify(require('mkdirp'));
-const writeFile = util.promisify(fs.writeFile);
-const tool = require('./tool');
-const obj = {};
-
+import {config} from './config';
+import {promisify} from 'util';
+import * as path from 'path';
+import * as fs from 'fs';
+import rollup from 'rollup';
+import resolve from 'rollup-plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
+import babel from 'rollup-plugin-babel';
+import * as tool from './tool';
+import _mkdirp from 'mkdirp';
+const mkdirp = promisify(_mkdirp);
+const writeFile = promisify(fs.writeFile);
 
 /**
  * jsの個別コンパイル & ファイルコピー
 */
-obj.compile = async (filePath) => {
+export const compile = async (filePath) => {
 	const inputOptions = {
 		input: filePath,
 		plugins: [
@@ -49,7 +48,7 @@ obj.compile = async (filePath) => {
 
 		return [codeFile, mapFile];
 	}catch(error){
-		console.log('error');
+		console.log('rollup compile error');
 		console.log(error);
 	}
 };
@@ -57,15 +56,13 @@ obj.compile = async (filePath) => {
 /**
  * jsの全体コンパイル & ファイルコピー
 */
-obj.dest = async () => {
+export const dest = async () => {
 	try{
-		const promises = await obj.compile(config.js.src);
+		const promises = await compile(config.js.src);
 		await Promise.all(promises);
 		console.log('finish all js compile.');
 	}catch(error){
-		console.log('error');
+		console.log('rollup dest error');
 		console.log(error);
 	}
 };
-
-module.exports = obj;

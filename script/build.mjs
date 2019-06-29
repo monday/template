@@ -1,14 +1,12 @@
-'use strict';
-const config = require('./config');
-//const path = require('path');
-const bs = require('browser-sync').create(config.name);
-const ejs = require('./ejs');
-const sass = require('./sass');
-const rollup = require('./rollup');
-const copy = require('./copy');
-const del = require('./delete');
-const tool = require('./tool');
-
+import {config} from './config';
+import browserSync from 'browser-sync';
+import * as ejs from './ejs';
+import * as sass from './sass';
+import * as rollup from './rollup';
+import * as copy from './copy';
+import * as del from './delete';
+import * as tool from './tool';
+const bs = browserSync.create(config.name);
 
 /**
  * エラーが発生しても落ちないようにする

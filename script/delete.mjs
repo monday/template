@@ -1,15 +1,12 @@
-'use strict';
-const config = require('./config');
-const del = require('del');
-const tool = require('./tool');
-const obj = {};
-
+import {config} from './config';
+import del from 'del';
+import * as tool from './tool';
 
 /**
  * filePathのファイルを削除する
  * 引数なしの場合は全削除する
 */
-obj.exec = (filePath) => {
+export const exec = (filePath) => {
 	const expression = filePath ? tool.convertSrcToDest(filePath) : config.dest;
 
 	del.sync(expression);
@@ -18,8 +15,6 @@ obj.exec = (filePath) => {
 /**
  * コマンドから実行する
 */
-if(/delete\.js/.test(process.argv[1])){
-	obj.exec();
+if(/delete\.mjs/.test(process.argv[1])){
+	exec();
 }
-
-module.exports = obj;

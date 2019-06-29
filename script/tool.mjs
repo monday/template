@@ -1,13 +1,10 @@
 'use strict';
-const config = require('./config');
-//const path = require('path');
-const obj = {};
-
+import {config} from './config';
 
 /**
  * filepath先頭のsrcをdestへ変換する
 */
-obj.convertSrcToDest = (srcPath) => {
+export const convertSrcToDest = (srcPath) => {
   const regExp = new RegExp('^' + config.src);
 
   return srcPath.replace(regExp, config.dest);
@@ -16,7 +13,7 @@ obj.convertSrcToDest = (srcPath) => {
 /**
  * コピーするファイルの拡張子からglobを生成する
 */
-obj.getCopyGlob = () => {
+export const getCopyGlob = () => {
 	let extension = [];
 
 	for(let pattern of Object.keys(config.copy)){
@@ -25,5 +22,3 @@ obj.getCopyGlob = () => {
 
 	return `src/**/*.@(${extension.join('|')})`;
 };
-
-module.exports = obj;

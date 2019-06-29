@@ -1,21 +1,20 @@
-'use strict';
-const config = require('./config');
-const util = require('util');
-const path = require('path');
-const fs = require('fs');
-const ejs = require('ejs');
-const mkdirp = util.promisify(require('mkdirp'));
-const glob = util.promisify(require('glob'));
-const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
-const bs = require('browser-sync').get(config.name);
-const obj = {};
-
+import {config} from './config';
+import {promisify} from 'util';
+import * as path from 'path';
+import * as fs from 'fs';
+import ejs from 'ejs';
+import broserSync from 'browser-sync';
+import _mkdirp from 'mkdirp';
+import _glob from 'glob';
+const mkdirp = promisify(_mkdirp);
+const glob = promisify(_glob);
+const readFile = promisify(fs.readFile);
+const writeFile = promisify(fs.writeFile);
 
 /**
  * EJSの個別コンパイル & ファイルコピー
 */
-obj.compile = async (filePath) => {
+export const compile = async (filePath) => {
 	try{
 		const extension = path.extname(filePath);
 		const filename = path.basename(filePath, extension);
@@ -23,6 +22,7 @@ obj.compile = async (filePath) => {
 		const dirname = path.dirname(filePath).replace(expression, '');
 		const destDirname = `${config.dest}${dirname}/`;
 		const destPath = `${destDirname}${filename}.html`;
+		const bs = broserSync.get(config.name);
 
 		// EJSのPathからDestディレクトリを作成
 		await mkdirp(destDirname);
@@ -32,6 +32,7 @@ obj.compile = async (filePath) => {
 		const htmlData = await ejs.compile(ejsData, {
 			filename: filePath
 		});
+
 		// HTMLファイルの書き込み
 		return writeFile(destPath, htmlData({
 			// browsersyncの非公開メソッド
@@ -39,8 +40,8 @@ obj.compile = async (filePath) => {
 			// 絶対パスのために必要
 			// ejsテンプレートに
 			// {
-			// 	local: 'http://localhost:\d\d\d\d',
-			//	external: 'http://(IP):\d\d\d\d'
+			// 	local: 'http://localhost:(port)',
+			//	external: 'http://(IP):(port)'
 			// }
 			// が渡る
 			urls: bs.instance.utils.getUrlOptions(bs.instance.options).toJS(),
@@ -55,12 +56,12 @@ obj.compile = async (filePath) => {
 /**
  * EJSの全体コンパイル & ファイルコピー
 */
-obj.dest = async () => {
+export const dest = async () => {
 	try{
 		const files = await glob(config.ejs.src);
 		let promises = [];
 		for(let file of files){
-			promises.push(obj.compile(file));
+			promises.push(compile(file));
 		}
 		await Promise.all(promises);
 		console.log('finish all ejs compile.');
@@ -69,5 +70,3 @@ obj.dest = async () => {
 		console.log(error);
 	}
 };
-
-module.exports = obj;
