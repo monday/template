@@ -13,12 +13,12 @@ const writeFile = promisify(fs.writeFile);
  * ファイルを個別コピーする
 */
 export const file = async (filePath, encoding) => {
-	try{
-		const destPath = tool.convertSrcToDest(filePath);
-		const destDirname = path.dirname(destPath);
+	const destPath = tool.convertSrcToDest(filePath, 'images');
+	const destDir = path.dirname(destPath);
 
+	try{
 		// ディレクトリの作成
-		await mkdirp(destDirname);
+		await mkdirp(destDir);
 		// ファイルの読み込み
 		const fileData = await readFile(filePath, encoding);
 		// ファイルの書き込み

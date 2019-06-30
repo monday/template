@@ -1,13 +1,16 @@
-'use strict';
 import {config} from './config';
+import * as path from 'path';
 
 /**
  * filepath先頭のsrcをdestへ変換する
 */
-export const convertSrcToDest = (srcPath) => {
-  const regExp = new RegExp('^' + config.src);
+export const convertSrcToDest = (filePath, dirName, extension) => {
+	const parse = path.parse(filePath);
+	let dir = path.join(config.dest, dirName);
+	parse.dir.split(path.sep).slice(2).forEach((name) => dir = path.join(dir, name));
+	const base = extension ? `${parse.name}${extension}` : parse.base;
 
-  return srcPath.replace(regExp, config.dest);
+	return path.join(dir, base);
 };
 
 /**

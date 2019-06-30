@@ -25,10 +25,10 @@ del.exec();
 /**
  * ソースファイルをコンパイルしてコピーする
 */
-sass.dest();
-rollup.dest();
 copy.dest();
 ejs.dest();
+sass.dest();
+rollup.dest();
 
 /**
  * browsersyncを起動する
@@ -73,7 +73,7 @@ watchEjs.on('ready', () => {
 			if(isPartial(file)){
 				await ejs.dest();
 			}else{
-				await del.exec(tool.convertSrcToDest(file));
+				await del.exec(tool.convertSrcToDest(file, '', '.html'));
 			}
 			bs.reload();
 			console.log(`finish ${file} delete.`);
@@ -134,7 +134,7 @@ watchCopy.on('ready', () => {
 		}
 	}).on('unlink', (file) => {
 		try{
-			del.exec(tool.convertSrcToDest(file));
+			del.exec(tool.convertSrcToDest(file, 'images'));
 			console.log(`finish ${file} delete.`);
 			bs.reload();
 		}catch(error){

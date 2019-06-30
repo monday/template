@@ -6,6 +6,7 @@ import ejs from 'ejs';
 import broserSync from 'browser-sync';
 import _mkdirp from 'mkdirp';
 import _glob from 'glob';
+import * as tool from './tool';
 const mkdirp = promisify(_mkdirp);
 const glob = promisify(_glob);
 const readFile = promisify(fs.readFile);
@@ -15,15 +16,13 @@ const writeFile = promisify(fs.writeFile);
  * EJSの個別コンパイル & ファイルコピー
 */
 export const compile = async (filePath) => {
-	try{
-		const parse = path.parse(filePath);
-		let dir = config.dest;
-		parse.dir.split(path.sep).slice(2).forEach((name) => dir = path.join(dir, name));
-		const destPath = path.join(dir, `${parse.name}.html`);
-		const bs = broserSync.get(config.name);
+	const bs = broserSync.get(config.name);
+	const destPath = tool.convertSrcToDest(filePath, '', '.html');
+	const destDir = path.dirname(destPath);
 
+	try{
 		// EJSのPathからDestディレクトリを作成
-		await mkdirp(dir);
+		await mkdirp(destDir);
 		// EJSファイルの読み込み
 		const ejsData = await readFile(filePath, config.encoding);
 		// EJSファイルのコンパイル

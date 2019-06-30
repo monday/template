@@ -33,16 +33,17 @@ export const compile = async (filePath) => {
 			sourcemap: true,
 		},
 	};
-	const destPath = tool.convertSrcToDest(filePath);
+	const destPath = tool.convertSrcToDest(filePath, 'js');
+	const destDir = path.dirname(destPath);
 
 	try{
+		await mkdirp(destDir);
 		const bundle = await rollup.rollup(inputOptions);
 		const {output} = await bundle.generate(outputOptions);
 		//const {code, map} = await bundle.generate(outputOptions);
 		// TODO: code splitに対応する
 		const code = output[0].code;
 		const map = output[0].map;
-		await mkdirp(path.dirname(destPath));
 		const codeFile = writeFile(destPath, code);
 		const mapFile = writeFile(destPath.replace(/\.js/, '.map.js'), map);
 

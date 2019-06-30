@@ -16,17 +16,15 @@ const writeFile = promisify(fs.writeFile);
  * SASSの個別コンパイル & ファイルコピー
 */
 export const compile = async (filePath) => {
-	try{
-		const extension = path.extname(filePath);
-		const filename = path.basename(filePath, extension);
-		const dirname = tool.convertSrcToDest(path.dirname(filePath)).replace('scss', 'css');
-		const destDirname = `${dirname}/`;
-		const destPath = `${destDirname}${filename}.css`;
-		const sourcemapPath = `${destDirname}${filename}.css.map`;
-		//const render = util.promisify(sass.render);
+	const dirName = 'css';
+	const destPath = tool.convertSrcToDest(filePath, dirName, '.css');
+	const sourcemapPath = tool.convertSrcToDest(filePath, dirName, '.map.css');
+	const destDir = path.dirname(destPath);
+	////const render = util.promisify(sass.render);
 
+	try{
 		// ディレクトリの作成
-		await mkdirp(destDirname);
+		await mkdirp(destDir);
 		// sassのコンパイル
 		//const preCssData = await render({
 		//	sourceMap: true,
