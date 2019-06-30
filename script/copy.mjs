@@ -1,9 +1,12 @@
+import {config} from './config';
 import {promisify} from 'util';
 import * as path from 'path';
 import * as fs from 'fs';
+import _bs from 'browser-sync';
 import _mkdirp from 'mkdirp';
 import _glob from 'glob';
 import * as tool from './tool';
+import * as del from './delete';
 const mkdirp = promisify(_mkdirp);
 const glob = promisify(_glob);
 const readFile = promisify(fs.readFile);
@@ -47,4 +50,43 @@ export const dest = async () => {
 		console.log('copy dest error');
 		console.log(error);
 	}
+};
+
+/**
+ * srcのwatch
+*/
+export const watch = () => {
+	const bs = _bs.get(config.name);
+	const watch = bs.watch(tool.getCopyGlob());
+
+	watch.on('ready', () => {
+		watch.on('add', async (filePath) => {
+			try{
+				await file(filePath);
+				bs.reload();
+				console.log(`finish ${filePath} add.`);
+			}catch(error){
+				console.log('copy add error');
+				console.log(error);
+			}
+		}).on('change', async (filePath) => {
+			try{
+				await file(filePath);
+				bs.reload();
+				console.log(`finish ${filePath} change.`);
+			}catch(error){
+				console.log('copy change error');
+				console.log(error);
+			}
+		}).on('unlink', (filePath) => {
+			try{
+				del.exec(tool.convertSrcToDest(filePath, 'images'));
+				console.log(`finish ${filePath} delete.`);
+				bs.reload();
+			}catch(error){
+				console.log('copy unlink error');
+				console.log(error);
+			}
+		});
+	});
 };

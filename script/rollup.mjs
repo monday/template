@@ -3,6 +3,7 @@ import {config} from './config';
 import {promisify} from 'util';
 import * as path from 'path';
 import * as fs from 'fs';
+import _bs from 'browser-sync';
 import rollup from 'rollup';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
@@ -66,4 +67,25 @@ export const dest = async () => {
 		console.log('rollup dest error');
 		console.log(error);
 	}
+};
+
+/**
+ * srcのwatch
+*/
+export const watch = () => {
+	const bs = _bs.get(config.name);
+	const watch = bs.watch(config.js.watch);
+
+	watch.on('ready', () => {
+		watch.on('add', (filePath) => {
+			dest(filePath);
+			bs.reload();
+		}).on('change', (filePath) => {
+			dest(filePath);
+			bs.reload();
+		}).on('unlink', (filePath) => {
+			dest(filePath);
+			bs.reload();
+		});
+	});
 };

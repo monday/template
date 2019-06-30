@@ -25,3 +25,7 @@ export const getCopyGlob = () => {
 
 	return `src/**/*.@(${extension.join('|')})`;
 };
+
+export const isPartial = (filePath) => {
+	return path.dirname(filePath).split(path.sep).some((name) => name === 'partial');
+};
