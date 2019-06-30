@@ -77,15 +77,33 @@ export const watch = () => {
 	const watch = bs.watch(config.js.watch);
 
 	watch.on('ready', () => {
-		watch.on('add', (filePath) => {
-			dest(filePath);
-			bs.reload();
-		}).on('change', (filePath) => {
-			dest(filePath);
-			bs.reload();
-		}).on('unlink', (filePath) => {
-			dest(filePath);
-			bs.reload();
+		watch.on('add', async (filePath) => {
+			try{
+				await dest(filePath);
+				bs.reload();
+				console.log(`finish ${filePath} add.`);
+			}catch(error){
+				console.log('js add error');
+				console.log(error);
+			}
+		}).on('change', async (filePath) => {
+			try{
+				await dest(filePath);
+				bs.reload();
+				console.log(`finish ${filePath} change.`);
+			}catch(error){
+				console.log('js change error');
+				console.log(error);
+			}
+		}).on('unlink', async (filePath) => {
+			try{
+				await dest(filePath);
+				bs.reload();
+				console.log(`finish ${filePath} delete.`);
+			}catch(error){
+				console.log('js delete error');
+				console.log(error);
+			}
 		});
 	});
 };

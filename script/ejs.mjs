@@ -85,7 +85,7 @@ export const watch = () => {
 					await compile(filePath);
 				}
 				bs.reload();
-				console.log(`finish ${filePath} compile.`);
+				console.log(`finish ${filePath} add.`);
 			}catch(error){
 				console.log('ejs add error');
 				console.log(error);
@@ -98,7 +98,7 @@ export const watch = () => {
 					await compile(filePath);
 				}
 				bs.reload();
-				console.log(`finish ${filePath} compile.`);
+				console.log(`finish ${filePath} change.`);
 			}catch(error){
 				console.log('ejs change error');
 				console.log(error);
@@ -113,7 +113,7 @@ export const watch = () => {
 				bs.reload();
 				console.log(`finish ${filePath} delete.`);
 			}catch(error){
-				console.log('ejs unlink error');
+				console.log('ejs delete error');
 				console.log(error);
 			}
 		});

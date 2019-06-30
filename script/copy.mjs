@@ -84,7 +84,7 @@ export const watch = () => {
 				console.log(`finish ${filePath} delete.`);
 				bs.reload();
 			}catch(error){
-				console.log('copy unlink error');
+				console.log('copy delete error');
 				console.log(error);
 			}
 		});
