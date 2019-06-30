@@ -31,11 +31,9 @@ const compress = async (input, output) => {
 const dest = async () => {
 	try{
 		const files = await glob(`src/**/*.@(${config.copy.images.join('|')})`);
-		let promises = [];
-
-		for(let file of files){
-			promises.push(compress(file, tool.convertSrcToDest(path.dirname(file))));
-		}
+		const promises = files.map((filePath) => {
+			return compress(filePath, path.dirname(tool.convertSrcToDest(filePath, 'images')));
+		});
 		await Promise.all(promises);
 		console.log('finish all images compresse.');
 	}catch(error){
