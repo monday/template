@@ -10,7 +10,7 @@ const bs = _bs.create(config.name);
 /**
  * エラーが発生しても落ちないようにする
 */
-process.on('uncaughtException', function(err) {
+process.on('uncaughtException', (err) => {
 	console.log('uncaughtException');
 	console.log(err);
 });
