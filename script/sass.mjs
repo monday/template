@@ -9,7 +9,9 @@ import autoprefixer from 'autoprefixer';
 import csso from 'postcss-csso';
 import * as tool from './tool';
 import _mkdirp from 'mkdirp';
+import _glob from 'glob';
 const mkdirp = promisify(_mkdirp);
+const glob = promisify(_glob);
 const writeFile = promisify(fs.writeFile);
 
 /**
@@ -66,7 +68,10 @@ export const compile = async (filePath) => {
 */
 export const dest = async () => {
 	try{
-		const promises = await compile(config.sass.src);
+		const files = await glob(config.sass.src);
+		const promises = files.map(async (filePath) => {
+			return await compile(path.normalize(filePath));
+		});
 		await Promise.all(promises);
 		console.log('finish all sass compile.');
 	}catch(error){

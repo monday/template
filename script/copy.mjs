@@ -39,11 +39,9 @@ export const dest = async () => {
 	try{
 		const expression = tool.getCopyGlob();
 		const files = await glob(expression);
-		let promises = [];
-
-		for(let _file of files){
-			promises.push(file(_file));
-		}
+		const promises = files.map(async (filePath) => {
+			return await file(path.normalize(filePath));
+		});
 		await Promise.all(promises);
 		console.log('finish all file copy.');
 	}catch(error){

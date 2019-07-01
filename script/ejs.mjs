@@ -57,10 +57,9 @@ export const compile = async (filePath) => {
 export const dest = async () => {
 	try{
 		const files = await glob(config.ejs.src);
-		let promises = [];
-		for(let file of files){
-			promises.push(compile(path.normalize(file)));
-		}
+		const promises = files.map(async (filePath) => {
+			return await compile(path.normalize(filePath));
+		});
 		await Promise.all(promises);
 		console.log('finish all ejs compile.');
 	}catch(error){
