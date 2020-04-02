@@ -2,10 +2,11 @@
   "name": "template",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "scripts": {
-    "start": "node --experimental-modules script/build.mjs",
-    "image": "node --experimental-modules script/image.mjs",
-    "del": "node --experimental-modules script/delete.mjs",
+    "start": "node --experimental-modules --es-module-specifier-resolution=node script/build.mjs",
+    "image": "node --experimental-modules --es-module-specifier-resolution=node script/image.mjs",
+    "del": "node --experimental-modules --es-module-specifier-resolution=node script/delete.mjs",
     "sass": "./node_modules/node-sass/bin/node-sass --source-map true src/css/style.scss dest/css/style.css"
   },
   "browserslist": [
@@ -28,7 +29,7 @@
     "imagemin-mozjpeg": "^8.0.0",
     "imagemin-pngquant": "^7.0.0",
     "mkdirp": "^0.5.1",
-    "node-sass": "^4.11.0",
+    "node-sass": "^4.13.0",
     "postcss": "^7.0.14",
     "postcss-csso": "^3.0.0",
     "rollup": "^1.6.0",
