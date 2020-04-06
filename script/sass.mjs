@@ -20,7 +20,7 @@ const writeFile = promisify(fs.writeFile);
 export const compile = async (filePath) => {
 	const dirName = 'css';
 	const destPath = tool.convertSrcToDest(filePath, dirName, '.css');
-	const sourcemapPath = tool.convertSrcToDest(filePath, dirName, '.map.css');
+	const sourcemapPath = tool.convertSrcToDest(filePath, dirName, '.css.map');
 	const destDir = path.dirname(destPath);
 	////const render = util.promisify(sass.render);
 
