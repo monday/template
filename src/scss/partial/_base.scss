@@ -1,21 +1,22 @@
 // base
 //-----------------------------------------------------
 html {
-	font-size : 62.5%;
-	font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, "Helvetica Neue", Helvetica, sans-serif;
-	// 古いmacでもヒラギノを細く表示する
-	-moz-osx-font-smoothing: grayscale;
-	-webkit-font-smoothing: antialiased;
+  font-size: 62.5%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN',
+    Meiryo, 'Helvetica Neue', Helvetica, sans-serif;
+  // 古いmacでもヒラギノを細く表示する
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
-	text-decoration: none;
-	-webkit-tap-highlight-color: rgba(0,0,0,0);
+  text-decoration: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 article {
-	margin: 0 1.5rem;
-	font-size: 1.5rem;
+  margin: 0 1.5rem;
+  font-size: 1.5rem;
 }
 
 // common variable
@@ -25,17 +26,17 @@ $images: '../images/';
 // mixin
 //-----------------------------------------------------
 @mixin clearfix() {
-	*zoom: 1;
+  *zoom: 1;
 
-	&:after {
-		content: "";
-		display: table;
-		clear: both;
-	}
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
 }
 
 @mixin rwdImg($size: 100%) {
-	img {
-		width: $size;
-	}
+  img {
+    width: $size;
+  }
 }
