@@ -15,6 +15,7 @@ import * as util from './Util';
 // TODO: API
 // TODO: 制御クラス
 // TODO: カレンダー
+// TODO: removeできるイベントインターフェースを作る
 
 //{
 //  text1: [
@@ -44,6 +45,7 @@ export class Validation {
     this.validationList = document.querySelector('.validation-list.-js');
     this.validationListError = document.querySelector('.validation-list.-js > .error.-js');
     this.validationUnit = this.validationList.querySelectorAll('.validation-unit.-js');
+    this.hasInitialValue = true;
     this.require = new Require(this.validationList);
     this.ormore = new OrMore(this.validationList);
     this.morethan = new MoreThan(this.validationList);
@@ -52,34 +54,38 @@ export class Validation {
     this.checkGroup = [...this.validationUnit].reduce((acc, current) => {
       const node = current.querySelector('.validation.-js');
       const name = node.name || node.dataset.name;
+      // errorNodeの追加
       node.classList.forEach((className) => {
-        if (!acc[name]) {
-          acc[name] = [];
-        }
         // ormore8 -> ormore
         const _className = /^[a-z]*/.exec(className)[0];
         const validater = this[_className];
-        if (!validater) return;
-        acc[name].push(validater.createCheckUnit(current));
+        if (validater === void 0) return;
+        //acc[name].push(validater.createCheckUnit(current));
         validater.appendError(current);
       });
+      if (!acc[name]) {
+        acc[name] = [];
+      }
       return acc;
     }, {});
-    //console.log(this.checkGroup);
 
     // 各validationの結果を受けてcheckGroupに保持する
     this.validationList.addEventListener('check', (e) => {
       e.stopPropagation();
       const { name, checkUnit } = e.detail;
-      const index = this.checkGroup[name].findIndex((_checkUnit) => {
-        return _checkUnit.type === checkUnit.type;
-      });
-      this.checkGroup[name][index] = checkUnit;
+      if (this.hasInitialValue) {
+        this.checkGroup[name].push(checkUnit);
+      } else {
+        const index = this.checkGroup[name].findIndex((_checkUnit) => {
+          return _checkUnit.type === checkUnit.type;
+        });
+        this.checkGroup[name][index] = checkUnit;
+      }
       // 実行される回数が多いのでdebounceをかける
-      clearTimeout(this.timerId);
-      this.timerId = setTimeout(() => {
-        this.check(this.checkGroup[name]);
-      }, 10);
+      //clearTimeout(this.timerId);
+      //this.timerId = setTimeout(() => {
+      this.check(this.checkGroup[name]);
+      //}, 10);
     });
 
     // 一括チェックを行う
@@ -88,6 +94,15 @@ export class Validation {
       e.stopPropagation();
       this.checkAll();
     });
+
+    this.validationUnit.forEach((current) => {
+      const node = current.querySelector('.validation.-js');
+      // TODO: debounceに引っかかるので方法を考える
+      node.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    //console.log(this.checkGroup);
+
+    this.hasInitialValue = false;
   }
 
   /**
@@ -187,7 +202,8 @@ class Require {
 
     //const regExp = new RegExp('require');
     this.wrapper.addEventListener('input', (e) => {
-      // checkbox / radio で走らないのでコメントアウト
+      // checkbox / radio では最初のnodeにのみrequireを設定しているため、
+      // 走らないパターンがあるのでコメントアウト
       //if (!regExp.test(e.target.classList)) return;
 
       const result = this.validate(e.target);
@@ -205,7 +221,8 @@ class Require {
           checkUnit: this.createCheckUnit(validationUnit, result),
         },
       });
-      this.wrapper.dispatchEvent(event);
+      //this.wrapper.dispatchEvent(event, { bubbles: true });
+      e.target.dispatchEvent(event, { bubbles: true });
     });
   }
 
