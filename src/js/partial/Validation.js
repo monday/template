@@ -13,7 +13,7 @@ import * as util from './Util';
 // TODO: ステップ表示とのエラー表示連携
 
 // TODO: API
-// TODO: 制御クラス
+// TODO: 制御クラス(入力制限)
 // TODO: カレンダー
 // TODO: removeできるイベントインターフェースを作る
 
@@ -44,48 +44,40 @@ export class Validation {
   constructor() {
     this.validationList = document.querySelector('.validation-list.-js');
     this.validationListError = document.querySelector('.validation-list.-js > .error.-js');
-    this.validationUnit = this.validationList.querySelectorAll('.validation-unit.-js');
-    this.hasInitialValue = true;
-    this.require = new Require(this.validationList);
-    this.ormore = new OrMore(this.validationList);
-    this.morethan = new MoreThan(this.validationList);
-    this.orless = new OrLess(this.validationList);
-    this.lessthan = new LessThan(this.validationList);
-    this.checkGroup = [...this.validationUnit].reduce((acc, current) => {
-      const node = current.querySelector('.validation.-js');
-      const name = node.name || node.dataset.name;
-      // errorNodeの追加
-      node.classList.forEach((className) => {
-        // ormore8 -> ormore
-        const _className = /^[a-z]*/.exec(className)[0];
-        const validater = this[_className];
-        if (validater === void 0) return;
-        //acc[name].push(validater.createCheckUnit(current));
-        validater.appendError(current);
-      });
-      if (!acc[name]) {
-        acc[name] = [];
+    this.checkGroup = {};
+
+    // 各validationからcheckGroupを作成する
+    this.validationList.addEventListener('addCheckGroup', (e) => {
+      e.stopPropagation();
+
+      const { node, type } = e.detail;
+      if (this.checkGroup[node.name] === void 0) {
+        this.checkGroup[node.name] = [];
       }
-      return acc;
-    }, {});
+      const hasSameType = this.checkGroup[node.name].some((checkUnit) => {
+        return checkUnit.type === type;
+      });
+      if (hasSameType) return;
+
+      this.checkGroup[node.name].push(e.detail);
+    });
 
     // 各validationの結果を受けてcheckGroupに保持する
     this.validationList.addEventListener('check', (e) => {
       e.stopPropagation();
-      const { name, checkUnit } = e.detail;
-      if (this.hasInitialValue) {
-        this.checkGroup[name].push(checkUnit);
-      } else {
-        const index = this.checkGroup[name].findIndex((_checkUnit) => {
-          return _checkUnit.type === checkUnit.type;
-        });
-        this.checkGroup[name][index] = checkUnit;
-      }
+
+      const { node, type } = e.detail;
+      const name = node.name;
+      const checkList = this.checkGroup[name];
+      const index = checkList.findIndex((_checkUnit) => {
+        return _checkUnit.type === type;
+      });
+      checkList[index] = e.detail;
       // 実行される回数が多いのでdebounceをかける
-      //clearTimeout(this.timerId);
-      //this.timerId = setTimeout(() => {
-      this.check(this.checkGroup[name]);
-      //}, 10);
+      clearTimeout(this.timerId);
+      this.timerId = setTimeout(() => {
+        this.check(checkList);
+      }, 10);
     });
 
     // 一括チェックを行う
@@ -95,14 +87,17 @@ export class Validation {
       this.checkAll();
     });
 
-    this.validationUnit.forEach((current) => {
-      const node = current.querySelector('.validation.-js');
-      // TODO: debounceに引っかかるので方法を考える
-      node.dispatchEvent(new Event('input', { bubbles: true }));
-    });
-    //console.log(this.checkGroup);
+    this.require = new Require(this.validationList);
+    this.ormore = new OrMore(this.validationList);
+    this.morethan = new MoreThan(this.validationList);
+    this.orless = new OrLess(this.validationList);
+    this.lessthan = new LessThan(this.validationList);
+    console.log(this.checkGroup);
 
-    this.hasInitialValue = false;
+    // 初期値チェックを行う
+    //Object.values(this.checkGroup).forEach((checkList) => {
+    //  this.check(checkList);
+    //});
   }
 
   /**
@@ -146,7 +141,7 @@ export class Validation {
    * @param {array} checkList
    */
   showCheckError(checkList) {
-    checkList[0].node.classList.add('-active');
+    checkList[0].node.closest('.validation-unit.-js').classList.add('-active');
   }
 
   /**
@@ -154,7 +149,7 @@ export class Validation {
    * @param {array} checkList
    */
   hideCheckError(checkList) {
-    checkList[0].node.classList.remove('-active');
+    checkList[0].node.closest('.validation-unit.-js').classList.remove('-active');
   }
 
   /**
@@ -163,8 +158,9 @@ export class Validation {
    */
   template(checkUnit) {
     const { type, node } = checkUnit;
-    const label = node.querySelector('.label.-js').textContent;
-    const errorMessage = node.querySelector(`.error-${type}.-js`).textContent;
+    const wrapper = node.closest('.validation-unit.-js');
+    const label = wrapper.querySelector('.label.-js').textContent;
+    const errorMessage = wrapper.querySelector(`.error-${type}.-js`).textContent;
 
     return `<div class="">${label}は${errorMessage}</div>`;
   }
@@ -176,13 +172,13 @@ class ValidationError {
   }
 
   // バリデーションのエラーを表示する
-  show(validationUnit, type) {
-    validationUnit.querySelector(`.error-${type}.-js`).classList.add('-active');
+  show(node, type) {
+    node.closest('.error.-js').querySelector(`.error-${type}.-js`).classList.add('-active');
   }
 
   // バリデーションのエラーを隠す
-  hide(validationUnit, type) {
-    validationUnit.querySelector(`.error-${type}.-js`).classList.remove('-active');
+  hide(node, type) {
+    node.closest('.error.-js').querySelector(`.error-${type}.-js`).classList.remove('-active');
   }
 
   template(type, errorMessage) {
@@ -197,46 +193,51 @@ class Require {
   constructor(validationList) {
     this.wrapper = validationList;
     this.type = this.constructor.name.toLowerCase();
+    this.target = this.wrapper.querySelectorAll('.require.-js');
     this.errorMessage = '必須項目です。';
     this.validationError = new ValidationError();
 
-    //const regExp = new RegExp('require');
+    this.target.forEach((node) => {
+      this.appendError(node);
+      const event = new CustomEvent('addCheckGroup', {
+        bubbles: true,
+        detail: {
+          node: node,
+          type: this.type,
+          result: this.validate(node),
+        },
+      });
+      node.dispatchEvent(event);
+    });
+
     this.wrapper.addEventListener('input', (e) => {
-      // checkbox / radio では最初のnodeにのみrequireを設定しているため、
-      // 走らないパターンがあるのでコメントアウト
-      //if (!regExp.test(e.target.classList)) return;
+      e.stopPropagation();
+
+      const regExp = new RegExp('require');
+      if (!regExp.test(e.target.classList)) return;
 
       const result = this.validate(e.target);
-      const validationUnit = e.target.closest('.validation-unit.-js');
       if (result) {
-        this.validationError.hide(validationUnit, this.type);
+        this.validationError.hide(e.target, this.type);
       } else {
-        this.validationError.show(validationUnit, this.type);
+        this.validationError.show(e.target, this.type);
       }
 
       const event = new CustomEvent('check', {
         bubbles: true,
         detail: {
-          name: e.target.name,
-          checkUnit: this.createCheckUnit(validationUnit, result),
+          node: e.target,
+          type: this.type,
+          result: result,
         },
       });
-      //this.wrapper.dispatchEvent(event, { bubbles: true });
-      e.target.dispatchEvent(event, { bubbles: true });
+      e.target.dispatchEvent(event);
     });
   }
 
-  createCheckUnit(validationUnit, result = false) {
-    return {
-      node: validationUnit,
-      type: this.type,
-      result: result,
-    };
-  }
-
-  appendError(validationUnit) {
+  appendError(node) {
     const errorNode = this.validationError.template(this.type, this.errorMessage);
-    validationUnit.querySelector('.error.-js').insertAdjacentHTML('beforeend', errorNode);
+    node.closest('.error.-js').insertAdjacentHTML('beforeend', errorNode);
   }
 
   validate(node) {
@@ -275,46 +276,53 @@ class Compare {
   constructor(validationList) {
     this.wrapper = validationList;
     this.type = this.constructor.name.toLowerCase();
+    this.target = this.wrapper.querySelectorAll(`[class*="${this.type}"].-js`);
     this.validationError = new ValidationError();
     this.regExp = '';
     this.errorMessage = '';
   }
 
   init() {
+    this.target.forEach((node) => {
+      this.appendError(node);
+      const event = new CustomEvent('addCheckGroup', {
+        bubbles: true,
+        detail: {
+          node: node,
+          type: this.type,
+          result: this.validate(node),
+        },
+      });
+      node.dispatchEvent(event);
+    });
+
     this.wrapper.addEventListener('input', (e) => {
+      e.stopPropagation();
       if (!this.regExp.test(e.target.classList)) return;
 
       const result = this.validate(e.target);
-      const validationUnit = e.target.closest('.validation-unit.-js');
       if (result) {
-        this.validationError.hide(validationUnit, this.type);
+        this.validationError.hide(e.target, this.type);
       } else {
-        this.validationError.show(validationUnit, this.type);
+        this.validationError.show(e.target, this.type);
       }
 
       const event = new CustomEvent('check', {
         bubbles: true,
         detail: {
-          name: e.target.name,
-          checkUnit: this.createCheckUnit(validationUnit, result),
+          node: e.target,
+          type: this.type,
+          result: result,
         },
       });
-      this.wrapper.dispatchEvent(event);
+      e.target.dispatchEvent(event);
     });
   }
 
-  createCheckUnit(validationUnit, result = false) {
-    return {
-      node: validationUnit,
-      type: this.type,
-      result: result,
-    };
-  }
-
-  appendError(validationUnit) {
-    const length = this.getLength(validationUnit.querySelector('.validation.-js'));
+  appendError(node) {
+    const length = this.getLength(node);
     const errorNode = this.validationError.template(this.type, `${length}${this.errorMessage}`);
-    validationUnit.querySelector('.error.-js').insertAdjacentHTML('beforeend', errorNode);
+    node.closest('.error.-js').insertAdjacentHTML('beforeend', errorNode);
   }
 
   validate(node) {

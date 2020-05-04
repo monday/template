@@ -1,27 +1,9 @@
 /**
- * interval時間内に連続して行われる処理は、最後の1回だけが実行される。
- * @param {function} fn
- * @param {number} interval
- */
-export function debounce(fn, interval) {
-  let timerId;
-  return (...test) => {
-    clearTimeout(timerId);
-    const context = this;
-    const args = arguments;
-    timerId = setTimeout(() => {
-      fn.apply(context, args);
-    }, interval);
-  };
-}
-
-/**
- * numberに変換する
- * false評価のものは0にする
+ * stringのtrue / false をbooleanに変換する
  * @param {any} value 変換する値
  */
-export function toNumber(value) {
-  return Number(value) ? Number(value) : 0;
+export function toBoolean(value) {
+  return value.toLowerCase() === 'true';
 }
 
 /**
