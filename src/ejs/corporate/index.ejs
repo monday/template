@@ -12,9 +12,8 @@ var page = {
 	twitterCard: 'summary',
 	twitterSite: 'templateのtwitterSite',
 }
-
-function content(site){
 -%>
+<%- include('../partial/_meta.ejs', { page: page }); -%>
+<%- include('../partial/_header.ejs'); -%>
 	<h1>contents!!</h1>
-<%}; -%>
-<% include ../partial/_layout -%>
+<%- include('../partial/_footer.ejs'); -%>

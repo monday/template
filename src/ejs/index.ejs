@@ -11,10 +11,10 @@ var page = {
 	ogSitename: 'templateのogSitename',
 	twitterCard: 'summary',
 	twitterSite: 'templateのtwitterSite',
-}
-
-function content(site){
+};
 -%>
+<%- include('partial/_meta.ejs', { page: page }); -%>
+<%- include('partial/_header.ejs'); -%>
 <main>
 	<article>
 		<div class="cover">
@@ -56,5 +56,4 @@ function content(site){
 		</section>
 	</article>
 </main>
-<%}; -%>
-<% include partial/_layout -%>
+<%- include('partial/_footer.ejs'); -%>
