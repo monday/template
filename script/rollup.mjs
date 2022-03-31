@@ -3,10 +3,10 @@ import { config } from './config';
 import { promisify } from 'util';
 import * as path from 'path';
 import _bs from 'browser-sync';
-import rollup from 'rollup';
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import babel from 'rollup-plugin-babel';
+import { rollup } from 'rollup';
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import { babel } from '@rollup/plugin-babel';
 import * as tool from './tool';
 import _glob from 'glob';
 const glob = promisify(_glob);
@@ -21,6 +21,7 @@ export const compile = async (filePath) => {
       resolve(),
       commonjs(),
       babel({
+        babelHelpers: 'bundled',
         exclude: 'node_modules/**', // only transpile our source code
       }),
     ],
@@ -34,7 +35,8 @@ export const compile = async (filePath) => {
   };
 
   try {
-    const bundle = await rollup.rollup(inputOptions);
+    //const bundle = await rollup.rollup(inputOptions);
+    const bundle = await rollup(inputOptions);
     return bundle.write(outputOptions);
   } catch (error) {
     console.error('rollup compile error', error);
