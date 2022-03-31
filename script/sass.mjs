@@ -8,9 +8,8 @@ import postcss from 'postcss';
 import autoprefixer from 'autoprefixer';
 import csso from 'postcss-csso';
 import * as tool from './tool';
-import _mkdirp from 'mkdirp';
+import mkdirp from 'mkdirp';
 import _glob from 'glob';
-const mkdirp = promisify(_mkdirp);
 const glob = promisify(_glob);
 const writeFile = promisify(fs.writeFile);
 
@@ -41,7 +40,7 @@ export const compile = async (filePath) => {
 		//// cssファイルの書き込み
 		//const preCss = await writeFile(_destPath, preCssData.css);
 		// sourcemapファイルの書き込み
-		await writeFile(sourcemapPath, preCssData.map);
+		// await writeFile(sourcemapPath, preCssData.map);
 		// postcss処理
 		const cssData = await postcss([autoprefixer, csso]).process(preCssData.css, {
 			from: destPath,
@@ -54,7 +53,7 @@ export const compile = async (filePath) => {
 		// cssファイルの書き込み
 		const css = await writeFile(destPath, cssData.css);
 		// sourcemapファイルの書き込み
-		const sourcemap = await writeFile(sourcemapPath, cssData.map);
+		const sourcemap = await writeFile(sourcemapPath, cssData.map.toString());
 
 		return [css, sourcemap];
 	}catch(error){
