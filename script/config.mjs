@@ -8,18 +8,12 @@ export const config = {
 		src: 'src/ejs/**/!(_)*.ejs',
 		watch: 'src/ejs/**/*.ejs'
 	},
-	sass: {
-		src: 'src/scss/style.scss',
-		watch: 'src/scss/**/*.scss'
+	css: {
+		src: 'src/css/style.css',
+		watch: 'src/css/**/*.css'
 	},
 	js: {
 		src: 'src/js/app.js',
 		watch: 'src/js/**/*.js'
 	},
-	copy: {
-		//files: ['html', 'css', 'json'],
-		files: [],
-		images: ['png', 'jpg', 'jpeg', 'gif', 'ico', 'svg'],
-		fonts: ['eot', 'woff', 'woff2', 'ttf', 'otf'],
-	}
 };

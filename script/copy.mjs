@@ -1,5 +1,5 @@
-import {config} from './config';
-import {promisify} from 'util';
+import { config } from './config';
+import { promisify } from 'util';
 import * as path from 'path';
 import * as fs from 'fs';
 import _bs from 'browser-sync';
@@ -8,23 +8,23 @@ import _glob from 'glob';
 import * as tool from './tool';
 import * as del from './delete';
 const glob = promisify(_glob);
-const readFile = promisify(fs.readFile);
-const writeFile = promisify(fs.writeFile);
 
 /**
  * ファイルを個別コピーする
 */
 export const file = async (filePath, encoding) => {
-	const destPath = tool.convertSrcToDest(filePath, 'images');
+	const destPath = tool.changeSrcToDest(filePath);
 	const destDir = path.dirname(destPath);
 
 	try{
 		// ディレクトリの作成
 		await mkdirp(destDir);
-		// ファイルの読み込み
-		const fileData = await readFile(filePath, encoding);
-		// ファイルの書き込み
-		return writeFile(destPath, fileData);
+        // ファイルのコピー
+        fs.copyFile(filePath, destPath, (err) => {
+            if(err) {
+                console.log(err.stack);
+            }
+        });
 	}catch(error){
 		console.log('copy file error');
 		console.log(error);
@@ -36,9 +36,10 @@ export const file = async (filePath, encoding) => {
 */
 export const dest = async () => {
 	try{
-		const expression = tool.getCopyGlob();
-		const files = await glob(expression);
+		const files = await glob('src/images/**/*.*');
 		const promises = files.map(async (filePath) => {
+            // originalは除外
+            if(/\/original\//.test(filePath)) return;
 			return await file(path.normalize(filePath));
 		});
 		await Promise.all(promises);
@@ -77,7 +78,7 @@ export const watch = () => {
 			}
 		}).on('unlink', (filePath) => {
 			try{
-				del.exec(tool.convertSrcToDest(filePath, 'images'));
+				del.exec(tool.changeSrcToDest(filePath));
 				console.log(`finish ${filePath} delete.`);
 				bs.reload();
 			}catch(error){

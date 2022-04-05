@@ -2,21 +2,27 @@ import {config} from './config';
 import {promisify} from 'util';
 import * as path from 'path';
 import _glob from 'glob';
+import mkdirp from 'mkdirp';
 import imagemin from 'imagemin';
 import imageminMozjpeg from 'imagemin-mozjpeg';
 import imageminPngquant from 'imagemin-pngquant';
+import imageminSvgo from 'imagemin-svgo';
 import * as tool from './tool';
 const glob = promisify(_glob);
 
 /**
- * jpgとpngを圧縮する
+ * jpg / png / svgを圧縮する
 */
-const compress = async (input, output) => {
+const compress = async (input, dest) => {
 	try {
-		return imagemin([input], output, {
+		return imagemin([input], {
+            destination: dest,
 			plugins: [
 				imageminMozjpeg(),
-				imageminPngquant({quality: '65-80'})
+				imageminPngquant({
+                    quality: [0.6, 0.8]
+                }),
+				imageminSvgo(),
 			]
 		});
 	}catch(error){
@@ -26,13 +32,17 @@ const compress = async (input, output) => {
 };
 
 /**
- * 全てのjpgとpngを圧縮する
+ * 全てのjpg / png / svgを圧縮する
 */
 const dest = async () => {
 	try{
-		const files = await glob(`src/**/*.@(${config.copy.images.join('|')})`);
-		const promises = files.map((filePath) => {
-			return compress(filePath, path.dirname(tool.convertSrcToDest(filePath, 'images')));
+		const files = await glob(`${config.src}/images/original/**/*.@(jp?(e)g|png|svg)`);
+		const promises = files.map(async (filePath) => {
+            const arr = path.dirname(filePath).split(path.sep);
+            arr.splice(2, 1);
+            const dest = arr.join(path.sep);
+            await mkdirp(dest);
+			return compress(filePath, dest);
 		});
 		await Promise.all(promises);
 		console.log('finish all images compresse.');

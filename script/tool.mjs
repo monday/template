@@ -2,15 +2,22 @@ import {config} from './config';
 import * as path from 'path';
 
 /**
- * filepath先頭のsrcをdestへ変換する
+ * srcをdestへ変換
+ * ディレクトリの変更
+ * 拡張子の変更
 */
-export const convertSrcToDest = (filePath, dirName, extension) => {
-	const parse = path.parse(filePath);
-	let dir = path.join(config.dest, dirName);
-	parse.dir.split(path.sep).slice(2).forEach((name) => dir = path.join(dir, name));
-	const base = extension ? `${parse.name}${extension}` : parse.base;
+export const convertSrcToDest = (src, dir, ext) => {
+	return [config.dest, dir, ...src.split(path.sep).slice(2)]
+        .filter(Boolean)// 空白の削除
+        .join(path.sep)// セパレータで結合
+        .replace(/\..*$/, `${ext}`);// 拡張子の置換
+};
 
-	return path.join(dir, base);
+/**
+ * path先頭のsrcをdestへ変換する
+*/
+export const changeSrcToDest = (src) => {
+	return [config.dest, ...src.split(path.sep).slice(1)].join(path.sep);
 };
 
 /**

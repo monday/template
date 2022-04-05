@@ -1,7 +1,7 @@
 // base
 //-----------------------------------------------------
 html {
-  font-size: 62.5%;
+  font-size: 62.5%;// rem: 10px;
   font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN',
     Meiryo, 'Helvetica Neue', Helvetica, sans-serif;
   // 古いmacでもヒラギノを細く表示する
@@ -21,22 +21,25 @@ article {
 
 // common variable
 //-----------------------------------------------------
-$images: '../images/';
+//$images: '../images/';
+:root {
+  $cover--fontColor: #fff;
+}
 
 // mixin
 //-----------------------------------------------------
-@mixin clearfix() {
-  *zoom: 1;
-
-  &:after {
-    content: '';
-    display: table;
-    clear: both;
-  }
-}
-
-@mixin rwdImg($size: 100%) {
-  img {
-    width: $size;
-  }
-}
+//@mixin clearfix() {
+//  *zoom: 1;
+//
+//  &:after {
+//    content: '';
+//    display: table;
+//    clear: both;
+//  }
+//}
+//
+//@mixin rwdImg($size: 100%) {
+//  img {
+//    width: $size;
+//  }
+//}

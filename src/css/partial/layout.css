@@ -91,10 +91,14 @@
   margin: 2rem 0;
   font-size: 2rem;
 
-  a {
+  & a {
     color: #fff;
   }
 }
+
+//.nav--item a {
+//  color: #fff;
+//}
 
 // container
 //-----------------------------------------------------

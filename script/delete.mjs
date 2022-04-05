@@ -15,5 +15,6 @@ export const exec = (filePath) => {
  * コマンドから実行する
 */
 if(/delete\.mjs/.test(process.argv[1])){
-	exec();
+    const arg = process.argv[2] ? process.argv[2] : '';
+	exec(arg);
 }

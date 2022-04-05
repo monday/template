@@ -1,7 +1,7 @@
 import {config} from './config';
 import _bs from 'browser-sync';
 import * as ejs from './ejs';
-import * as sass from './sass';
+import * as postcss from './postcss';
 import * as rollup from './rollup';
 import * as copy from './copy';
 import * as del from './delete';
@@ -24,7 +24,7 @@ del.exec();
  * ソースファイルをコンパイルしてコピーする
 */
 copy.dest();
-sass.dest();
+postcss.dest();
 rollup.dest();
 ejs.dest();
 
@@ -41,6 +41,6 @@ bs.init({
  * ファイルの変更を監視する
 */
 copy.watch();
-sass.watch();
+postcss.watch();
 rollup.watch();
 ejs.watch();

@@ -1,16 +1,19 @@
-import {config} from './config';
-import {promisify} from 'util';
+import { config } from './config';
+import { promisify } from 'util';
 import * as path from 'path';
 import * as fs from 'fs';
 import _bs from 'browser-sync';
-import sass from 'node-sass';
 import postcss from 'postcss';
-import autoprefixer from 'autoprefixer';
+//import autoprefixer from 'autoprefixer';// preset-envに含まれている
 import csso from 'postcss-csso';
-import * as tool from './tool';
+import atImport from 'postcss-import';
+import scss from 'postcss-scss';
+import postcssPresetEnv from 'postcss-preset-env';
 import mkdirp from 'mkdirp';
 import _glob from 'glob';
+import * as tool from './tool';
 const glob = promisify(_glob);
+const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 
 /**
@@ -21,39 +24,33 @@ export const compile = async (filePath) => {
 	const destPath = tool.convertSrcToDest(filePath, dirName, '.css');
 	const sourcemapPath = tool.convertSrcToDest(filePath, dirName, '.css.map');
 	const destDir = path.dirname(destPath);
-	////const render = util.promisify(sass.render);
 
 	try{
 		// ディレクトリの作成
 		await mkdirp(destDir);
-		// sassのコンパイル
-		//const preCssData = await render({
-		//	sourceMap: true,
-		//	file: filePath,
-		//	outFile: destPath,
-		//});
-		const preCssData = sass.renderSync({
-			file: filePath,
-			sourceMap: true,
-			outFile: destPath,
-		});
-		//// cssファイルの書き込み
-		//const preCss = await writeFile(_destPath, preCssData.css);
-		// sourcemapファイルの書き込み
-		// await writeFile(sourcemapPath, preCssData.map);
+        const preCssData = await readFile(filePath, { encoding: config.encoding });
 		// postcss処理
-		const cssData = await postcss([autoprefixer, csso]).process(preCssData.css, {
-			from: destPath,
+		const cssData = await postcss([
+            atImport,
+            postcssPresetEnv({
+                features: {
+                    'nesting-rules': true,
+                }
+            }),
+            //autoprefixer,
+            csso
+        ]).process(preCssData, {
+            parser: scss,
+			from: filePath,
 			to: destPath,
 			map: {
 				inline: false,
-				//prev: false,
 			}
 		});
 		// cssファイルの書き込み
-		const css = await writeFile(destPath, cssData.css);
+		const css = writeFile(destPath, cssData.css);
 		// sourcemapファイルの書き込み
-		const sourcemap = await writeFile(sourcemapPath, cssData.map.toString());
+		const sourcemap = writeFile(sourcemapPath, cssData.map.toString());
 
 		return [css, sourcemap];
 	}catch(error){
@@ -67,7 +64,7 @@ export const compile = async (filePath) => {
 */
 export const dest = async () => {
 	try{
-		const files = await glob(config.sass.src);
+		const files = await glob(config.css.src);
 		const promises = files.map(async (filePath) => {
 			return await compile(path.normalize(filePath));
 		});
@@ -84,7 +81,7 @@ export const dest = async () => {
 */
 export const watch = () => {
 	const bs = _bs.get(config.name);
-	const watch = bs.watch(config.sass.watch);
+	const watch = bs.watch(config.css.watch);
 
 	watch.on('ready', () => {
 		watch.on('add', async (filePath) => {

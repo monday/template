@@ -29,7 +29,7 @@ export const compile = async (filePath) => {
   const outputOptions = {
     format: 'iife',
     name: 'app',
-    file: tool.convertSrcToDest(filePath, 'js'),
+    file: tool.changeSrcToDest(filePath),
     //dir: destDir,// 複数ファイルの場合必要
     sourcemap: true,
   };
