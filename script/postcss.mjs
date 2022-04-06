@@ -54,7 +54,7 @@ export const compile = async (filePath) => {
 
 		return [css, sourcemap];
 	}catch(error){
-		console.log('sass compile error');
+		console.log('css compile error');
 		console.log(error);
 	}
 };
@@ -69,9 +69,9 @@ export const dest = async () => {
 			return await compile(path.normalize(filePath));
 		});
 		await Promise.all(promises);
-		console.log('finish all sass compile.');
+		console.log('finish all css compile.');
 	}catch(error){
-		console.log('sass dest error');
+		console.log('css dest error');
 		console.log(error);
 	}
 };
@@ -90,7 +90,7 @@ export const watch = () => {
 				bs.reload();
 				console.log(`finish ${filePath} add.`);
 			}catch(error){
-				console.log('sass add error');
+				console.log('css add error');
 				console.log(error);
 			}
 		}).on('change', async (filePath) => {
@@ -99,7 +99,7 @@ export const watch = () => {
 				bs.reload();
 				console.log(`finish ${filePath} change.`);
 			}catch(error){
-				console.log('sass change error');
+				console.log('css change error');
 				console.log(error);
 			}
 		}).on('unlink', async (filePath) => {
@@ -108,7 +108,7 @@ export const watch = () => {
 				bs.reload();
 				console.log(`finish ${filePath} delete.`);
 			}catch(error){
-				console.log('sass delete error');
+				console.log('css delete error');
 				console.log(error);
 			}
 		});
