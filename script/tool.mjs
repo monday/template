@@ -20,19 +20,6 @@ export const changeSrcToDest = (src) => {
 	return [config.dest, ...src.split(path.sep).slice(1)].join(path.sep);
 };
 
-/**
- * コピーするファイルの拡張子からglobを生成する
-*/
-export const getCopyGlob = () => {
-	let extension = [];
-
-	for(let pattern of Object.keys(config.copy)){
-		extension = extension.concat(config.copy[pattern]);
-	}
-
-	return `src/**/*.@(${extension.join('|')})`;
-};
-
 export const isPartial = (filePath) => {
 	return path.dirname(filePath).split(path.sep).some((name) => name === 'partial');
 };
