@@ -9,6 +9,7 @@ import csso from 'postcss-csso';
 import atImport from 'postcss-import';
 import scss from 'postcss-scss';
 import postcssPresetEnv from 'postcss-preset-env';
+import postcssMixin from 'postcss-mixins';
 import mkdirp from 'mkdirp';
 import _glob from 'glob';
 import * as tool from './tool';
@@ -32,6 +33,7 @@ export const compile = async (filePath) => {
 		// postcss処理
 		const cssData = await postcss([
             atImport,
+            postcssMixin,
             postcssPresetEnv({
                 features: {
                     'nesting-rules': true,
