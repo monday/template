@@ -36,7 +36,8 @@ export const file = async (filePath, encoding) => {
 */
 export const dest = async () => {
 	try{
-		const files = await glob('src/images/**/*.*');
+		//const files = await glob('src/images/**/*.*');
+		const files = await glob(config.image.src);
 		const promises = files.map(async (filePath) => {
             // originalは除外
             if(/\/original\//.test(filePath)) return;
@@ -53,9 +54,9 @@ export const dest = async () => {
 /**
  * srcのwatch
 */
-export const watch = () => {
+export const watch = async () => {
 	const bs = _bs.get(config.name);
-	const watch = bs.watch(tool.getCopyGlob());
+	const watch = bs.watch(config.image.watch);
 
 	watch.on('ready', () => {
 		watch.on('add', async (filePath) => {

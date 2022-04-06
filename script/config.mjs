@@ -16,4 +16,8 @@ export const config = {
 		src: 'src/js/app.js',
 		watch: 'src/js/**/*.js'
 	},
+	image: {
+		src: 'src/images/**/*.*',
+		watch: 'src/images/**/*.*'
+	},
 };
